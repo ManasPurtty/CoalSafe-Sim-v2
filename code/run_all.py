@@ -20,6 +20,40 @@ from generate_scenarios import get_scenarios, get_time_axis
 from generate_latent_state import generate_all_latent
 from generate_observations import generate_observations
 from generate_thermal_images import generate_thermal_images
+from generate_per_minute_graphs import generate_per_minute_graphs
+
+SCENARIO_DISPLAY_NAMES = {
+    "S01": "Stable Baseline",
+    "S02": "Early Oxidation",
+    "S03": "Developing Core",
+    "S04": "Heat Migration",
+    "S05": "High Risk",
+    "S06": "Early Mitigation (t=45m)",
+    "S07": "Late Mitigation (t=85m)",
+    "S08": "Environmental Variation",
+}
+
+SCENARIO_COLORS = {
+    "S01": "#004578",  # Navy Blue
+    "S02": "#d97706",  # Amber Yellow
+    "S03": "#0891b2",  # Teal Cyan
+    "S04": "#ea580c",  # Vibrant Orange
+    "S05": "#dc2626",  # Crimson Red
+    "S06": "#16a34a",  # Forest Green
+    "S07": "#9333ea",  # Deep Purple
+    "S08": "#64748b",  # Slate Gray
+}
+
+SCENARIO_STYLES = {
+    "S01": {"ls": "-",  "lw": 2.0, "marker": None},
+    "S02": {"ls": "--", "lw": 2.0, "marker": None},
+    "S03": {"ls": "-",  "lw": 2.2, "marker": None},
+    "S04": {"ls": "-.", "lw": 2.2, "marker": None},
+    "S05": {"ls": "-",  "lw": 2.5, "marker": None},
+    "S06": {"ls": "-",  "lw": 2.5, "marker": "o"},
+    "S07": {"ls": "--", "lw": 2.5, "marker": "^"},
+    "S08": {"ls": ":",  "lw": 2.0, "marker": None},
+}
 
 def generate_plots(obs_df, latent_df, thermal_meta):
 
@@ -28,27 +62,51 @@ def generate_plots(obs_df, latent_df, thermal_meta):
     scenarios = get_scenarios()
     sids = [s["scenario_id"] for s in scenarios]
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(12, 5.5))
     for sid in sids:
         d = latent_df[latent_df["scenario_id"] == sid]
-        ax.plot(d["timestamp_min"], d["internal_temperature"], label=sid)
-    ax.set_xlabel("Time (min)")
-    ax.set_ylabel("Internal Temperature (°C)")
-    ax.set_title("Internal Temperature vs Time")
-    ax.legend(fontsize=7, ncol=4)
+        st = SCENARIO_STYLES.get(sid, {"ls": "-", "lw": 1.5, "marker": None})
+        ax.plot(
+            d["timestamp_min"],
+            d["internal_temperature"],
+            label=SCENARIO_DISPLAY_NAMES.get(sid, sid),
+            color=SCENARIO_COLORS.get(sid, None),
+            linestyle=st["ls"],
+            linewidth=st["lw"],
+            marker=st["marker"],
+            markevery=12 if st["marker"] else None,
+            markersize=5
+        )
+    ax.axvline(45, color="#16a34a", linestyle=":", alpha=0.4, label="_nolegend_")
+    ax.axvline(85, color="#9333ea", linestyle=":", alpha=0.4, label="_nolegend_")
+    ax.set_xlabel("Time (min)", fontweight="bold")
+    ax.set_ylabel("Internal Temperature (°C)", fontweight="bold")
+    ax.set_title("Internal Temperature vs Time", fontweight="bold")
+    ax.legend(fontsize=8, ncol=4, loc="upper left", framealpha=0.95)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(gdir / "01_internal_temp_vs_time.png", dpi=150)
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(12, 5.5))
     for sid in sids:
         d = obs_df[obs_df["scenario_id"] == sid]
-        ax.plot(d["timestamp_min"], d["surface_temperature_max"], label=sid)
-    ax.set_xlabel("Time (min)")
-    ax.set_ylabel("Surface Temp Max (°C)")
-    ax.set_title("Surface Temperature (Max) vs Time")
-    ax.legend(fontsize=7, ncol=4)
+        st = SCENARIO_STYLES.get(sid, {"ls": "-", "lw": 1.5, "marker": None})
+        ax.plot(
+            d["timestamp_min"],
+            d["surface_temperature_max"],
+            label=SCENARIO_DISPLAY_NAMES.get(sid, sid),
+            color=SCENARIO_COLORS.get(sid, None),
+            linestyle=st["ls"],
+            linewidth=st["lw"],
+            marker=st["marker"],
+            markevery=12 if st["marker"] else None,
+            markersize=5
+        )
+    ax.set_xlabel("Time (min)", fontweight="bold")
+    ax.set_ylabel("Surface Temp Max (°C)", fontweight="bold")
+    ax.set_title("Surface Temperature (Max) vs Time", fontweight="bold")
+    ax.legend(fontsize=8, ncol=4, loc="upper left", framealpha=0.95)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(gdir / "02_surface_temp_vs_time.png", dpi=150)
@@ -57,46 +115,63 @@ def generate_plots(obs_df, latent_df, thermal_meta):
     fig, axes = plt.subplots(3, 1, figsize=(12, 10), sharex=True)
     for sid in sids:
         d = obs_df[obs_df["scenario_id"] == sid]
-        axes[0].plot(d["timestamp_min"], d["CO"], label=sid)
-        axes[1].plot(d["timestamp_min"], d["CO2"], label=sid)
-        axes[2].plot(d["timestamp_min"], d["O2"], label=sid)
-    axes[0].set_ylabel("CO (ppm)")
-    axes[0].set_title("Gas Concentrations vs Time")
-    axes[1].set_ylabel("CO2 (ppm)")
-    axes[2].set_ylabel("O2 (%)")
-    axes[2].set_xlabel("Time (min)")
+        st = SCENARIO_STYLES.get(sid, {"ls": "-", "lw": 1.5, "marker": None})
+        axes[0].plot(d["timestamp_min"], d["CO"], label=SCENARIO_DISPLAY_NAMES.get(sid, sid), color=SCENARIO_COLORS.get(sid), linestyle=st["ls"], lw=st["lw"])
+        axes[1].plot(d["timestamp_min"], d["CO2"], label=SCENARIO_DISPLAY_NAMES.get(sid, sid), color=SCENARIO_COLORS.get(sid), linestyle=st["ls"], lw=st["lw"])
+        axes[2].plot(d["timestamp_min"], d["O2"], label=SCENARIO_DISPLAY_NAMES.get(sid, sid), color=SCENARIO_COLORS.get(sid), linestyle=st["ls"], lw=st["lw"])
+    axes[0].set_ylabel("CO (ppm)", fontweight="bold")
+    axes[0].set_title("Gas Concentrations vs Time", fontweight="bold")
+    axes[1].set_ylabel("CO2 (ppm)", fontweight="bold")
+    axes[2].set_ylabel("O2 (%)", fontweight="bold")
+    axes[2].set_xlabel("Time (min)", fontweight="bold")
     for ax in axes:
-        ax.legend(fontsize=6, ncol=4)
+        ax.legend(fontsize=7, ncol=4, loc="upper left", framealpha=0.95)
         ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(gdir / "03_gases_vs_time.png", dpi=150)
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(12, 5.5))
     for sid in sids:
         d = obs_df[obs_df["scenario_id"] == sid]
-        ax.plot(d["timestamp_min"], d["risk_score"], label=sid)
-    ax.set_xlabel("Time (min)")
-    ax.set_ylabel("Risk Score (0-100)")
-    ax.set_title("Synthetic Risk Score vs Time")
+        st = SCENARIO_STYLES.get(sid, {"ls": "-", "lw": 1.5, "marker": None})
+        ax.plot(
+            d["timestamp_min"],
+            d["risk_score"],
+            label=SCENARIO_DISPLAY_NAMES.get(sid, sid),
+            color=SCENARIO_COLORS.get(sid, None),
+            linestyle=st["ls"],
+            linewidth=st["lw"]
+        )
+    ax.set_xlabel("Time (min)", fontweight="bold")
+    ax.set_ylabel("Risk Score (0-100)", fontweight="bold")
+    ax.set_title("Synthetic Risk Score vs Time", fontweight="bold")
     ax.axhline(20, color="green", ls="--", alpha=0.4, label="LOW threshold")
     ax.axhline(40, color="orange", ls="--", alpha=0.4, label="MEDIUM threshold")
     ax.axhline(60, color="red", ls="--", alpha=0.4, label="HIGH threshold")
     ax.axhline(80, color="darkred", ls="--", alpha=0.4, label="CRITICAL threshold")
-    ax.legend(fontsize=6, ncol=5)
+    ax.legend(fontsize=7, ncol=5, loc="upper left", framealpha=0.95)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(gdir / "04_risk_score_vs_time.png", dpi=150)
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(12, 5.5))
     for sid in sids:
         d = obs_df[obs_df["scenario_id"] == sid]
-        ax.plot(d["timestamp_min"], d["hotspot_area"], label=sid)
-    ax.set_xlabel("Time (min)")
-    ax.set_ylabel("Hotspot Area (cells)")
-    ax.set_title("Hotspot Area vs Time")
-    ax.legend(fontsize=7, ncol=4)
+        st = SCENARIO_STYLES.get(sid, {"ls": "-", "lw": 1.5, "marker": None})
+        ax.plot(
+            d["timestamp_min"],
+            d["hotspot_area"],
+            label=SCENARIO_DISPLAY_NAMES.get(sid, sid),
+            color=SCENARIO_COLORS.get(sid, None),
+            linestyle=st["ls"],
+            linewidth=st["lw"]
+        )
+    ax.set_xlabel("Time (min)", fontweight="bold")
+    ax.set_ylabel("Hotspot Area (cells)", fontweight="bold")
+    ax.set_title("Hotspot Area vs Time", fontweight="bold")
+    ax.legend(fontsize=8, ncol=4, loc="upper left", framealpha=0.95)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(gdir / "05_hotspot_area_vs_time.png", dpi=150)
@@ -108,11 +183,11 @@ def generate_plots(obs_df, latent_df, thermal_meta):
         do = obs_df[obs_df["scenario_id"] == sid]
         ax.scatter(dl["internal_temperature"].values,
                    do["surface_temperature_max"].values,
-                   s=5, alpha=0.5, label=sid)
+                   s=5, alpha=0.5, label=SCENARIO_DISPLAY_NAMES.get(sid, sid))
     ax.set_xlabel("Internal Temperature (°C)")
     ax.set_ylabel("Surface Temperature Max (°C)")
     ax.set_title("Internal vs Surface Temperature")
-    ax.plot([25, 80], [25, 80], "k--", alpha=0.3, label="1:1 line")
+    ax.plot([25, 200], [25, 200], "k--", alpha=0.3, label="1:1 line")
     ax.legend(fontsize=7, ncol=2)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
@@ -124,7 +199,7 @@ def generate_plots(obs_df, latent_df, thermal_meta):
         do = obs_df[obs_df["scenario_id"] == sid]
         anomaly = do["surface_temperature_max"] - do["ambient_temperature"]
         ax.scatter(anomaly.values, do["risk_score"].values,
-                   s=5, alpha=0.5, label=sid)
+                   s=5, alpha=0.5, label=SCENARIO_DISPLAY_NAMES.get(sid, sid))
     ax.set_xlabel("Surface Anomaly (°C above ambient)")
     ax.set_ylabel("Risk Score")
     ax.set_title("Risk Score vs Surface Temperature Anomaly")
@@ -148,7 +223,7 @@ def generate_plots(obs_df, latent_df, thermal_meta):
             window = t_surf - t_risk
         else:
             window = None
-        ew_data.append({"scenario": sid, "T_risk_HIGH": t_risk,
+        ew_data.append({"scenario": SCENARIO_DISPLAY_NAMES.get(sid, sid), "T_risk_HIGH": t_risk,
                         "T_surface_5C": t_surf, "window_min": window})
 
     fig, ax = plt.subplots(figsize=(8, 4))
@@ -204,6 +279,9 @@ def main():
 
     print("\n[PHASE 5] Generating validation plots ...")
     generate_plots(obs_df, latent_clean, thermal_meta)
+
+    print("\n[PHASE 6] Generating per-minute graph snapshots ...")
+    generate_per_minute_graphs(latent_clean)
 
     print("\n" + "=" * 65)
     print("  [DONE] CoalSafe-Sim Version 1 dataset generation complete.")

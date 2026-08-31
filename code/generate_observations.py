@@ -115,7 +115,7 @@ def generate_observations(latent_df):
                       + w["surface_anomaly"]  * surf_sev
                       + w["hotspot_growth"]   * hs_sev)
 
-            risk_score = np.clip(risk_raw * 100, 0, 100)
+            risk_score = round(float(np.clip(risk_raw * 100, 0, 100)), 2)
             risk_label = _risk_class(risk_score)
 
             obs_rows.append({

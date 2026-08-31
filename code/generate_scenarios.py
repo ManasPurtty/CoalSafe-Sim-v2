@@ -1,10 +1,13 @@
+"""
+generate_scenarios.py — Defines the eight required scenarios.
+"""
 
 import numpy as np
 import config as cfg
 
 def get_time_axis():
-
     return np.arange(0, cfg.NUM_TIME_POINTS, cfg.TIME_STEP_MIN)
+
 
 SCENARIOS = [
     {
@@ -17,7 +20,7 @@ SCENARIOS = [
         "core_y":             25,
         "core_depth":         0,
         "heating_pattern":    "none",
-        "scenario_factor":    0.0,       
+        "scenario_factor":    0.05,       # Baseline normal
         "mitigation_start_min": None,
         "ambient_setting":    30.0,
         "humidity_setting":   55.0,
@@ -36,7 +39,7 @@ SCENARIOS = [
         "core_y":             26,
         "core_depth":         0,
         "heating_pattern":    "slow",
-        "scenario_factor":    0.35,      
+        "scenario_factor":    0.35,      # Incubation phase: hidden sub-surface oxidation
         "mitigation_start_min": None,
         "ambient_setting":    30.0,
         "humidity_setting":   52.0,
@@ -55,7 +58,7 @@ SCENARIOS = [
         "core_y":             24,
         "core_depth":         0,
         "heating_pattern":    "moderate",
-        "scenario_factor":    0.70,      
+        "scenario_factor":    0.60,      # Sub-surface thermal core grows
         "mitigation_start_min": None,
         "ambient_setting":    31.0,
         "humidity_setting":   48.0,
@@ -74,7 +77,7 @@ SCENARIOS = [
         "core_y":             25,
         "core_depth":         0,
         "heating_pattern":    "strong",
-        "scenario_factor":    1.10,      
+        "scenario_factor":    0.85,      # Heat reaches surface
         "mitigation_start_min": None,
         "ambient_setting":    32.0,
         "humidity_setting":   45.0,
@@ -93,7 +96,7 @@ SCENARIOS = [
         "core_y":             27,
         "core_depth":         0,
         "heating_pattern":    "rapid",
-        "scenario_factor":    1.60,      
+        "scenario_factor":    1.20,      # Thermal core & all signals surge
         "mitigation_start_min": None,
         "ambient_setting":    34.0,
         "humidity_setting":   38.0,
@@ -112,8 +115,8 @@ SCENARIOS = [
         "core_y":             25,
         "core_depth":         0,
         "heating_pattern":    "moderate",
-        "scenario_factor":    0.90,      
-        "mitigation_start_min": 45,      
+        "scenario_factor":    0.75,      
+        "mitigation_start_min": 45,      # Early intervention at min 45
         "ambient_setting":    31.0,
         "humidity_setting":   50.0,
         "wind_setting":       2.0,
@@ -132,7 +135,7 @@ SCENARIOS = [
         "core_depth":         0,
         "heating_pattern":    "moderate",
         "scenario_factor":    0.90,      
-        "mitigation_start_min": 85,      
+        "mitigation_start_min": 85,      # Late intervention at min 85
         "ambient_setting":    31.0,
         "humidity_setting":   50.0,
         "wind_setting":       2.0,
@@ -150,17 +153,16 @@ SCENARIOS = [
         "core_y":             24,
         "core_depth":         0,
         "heating_pattern":    "moderate",
-        "scenario_factor":    0.55,      
+        "scenario_factor":    0.20,      
         "mitigation_start_min": None,
         "ambient_setting":    28.0,      
         "humidity_setting":   60.0,
-        "wind_setting":       3.5,       
-        "coal_moisture_setting": 14.0,   
-        "env_variation":      True,      
+        "wind_setting":       3.5,       # Windier
+        "coal_moisture_setting": 14.0,   # Wet coal
+        "env_variation":      True,      # Drift environmental variables
         "notes": "Environmental conditions alter the heat balance.",
     },
 ]
 
 def get_scenarios():
-
     return SCENARIOS

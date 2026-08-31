@@ -1,9 +1,9 @@
 scenario_id,scenario_type,random_seed,duration_min,time_step_min,core_x,core_y,core_depth,heating_pattern,scenario_factor,mitigation_start_min,ambient_setting,humidity_setting,wind_setting,coal_moisture_setting,notes
-S01,STABLE,42,120,1,25,25,0,none,0.0,,30.0,55.0,2.5,12.0,Stable baseline. No meaningful self-heating.
+S01,STABLE,42,120,1,25,25,0,none,0.05,,30.0,55.0,2.5,12.0,Stable baseline. No meaningful self-heating.
 S02,EARLY_OXIDATION,43,120,1,24,26,0,slow,0.35,,30.0,52.0,2.0,10.0,Hidden oxidation rises while surface remains almost normal.
-S03,DEVELOPING_CORE,44,120,1,26,24,0,moderate,0.7,,31.0,48.0,1.8,9.0,Sub-surface thermal core grows; gas and internal signals change.
-S04,HEAT_MIGRATION,45,120,1,25,25,0,strong,1.1,,32.0,45.0,1.5,8.0,Heat reaches surface; thermal anomaly begins.
-S05,HIGH_RISK,46,120,1,23,27,0,rapid,1.6,,34.0,38.0,1.0,6.0,Thermal core and all observable signals continue increasing.
-S06,EARLY_MITIGATION,47,120,1,25,25,0,moderate,0.9,45.0,31.0,50.0,2.0,10.0,Intervention occurs while the event is still developing.
+S03,DEVELOPING_CORE,44,120,1,26,24,0,moderate,0.6,,31.0,48.0,1.8,9.0,Sub-surface thermal core grows; gas and internal signals change.
+S04,HEAT_MIGRATION,45,120,1,25,25,0,strong,0.85,,32.0,45.0,1.5,8.0,Heat reaches surface; thermal anomaly begins.
+S05,HIGH_RISK,46,120,1,23,27,0,rapid,1.2,,34.0,38.0,1.0,6.0,Thermal core and all observable signals continue increasing.
+S06,EARLY_MITIGATION,47,120,1,25,25,0,moderate,0.75,45.0,31.0,50.0,2.0,10.0,Intervention occurs while the event is still developing.
 S07,LATE_MITIGATION,48,120,1,25,25,0,moderate,0.9,85.0,31.0,50.0,2.0,10.0,"Intervention occurs later, after stronger thermal development."
-S08,ENVIRONMENTAL_VARIATION,49,120,1,25,24,0,moderate,0.55,,28.0,60.0,3.5,14.0,Environmental conditions alter the heat balance.
+S08,ENVIRONMENTAL_VARIATION,49,120,1,25,24,0,moderate,0.2,,28.0,60.0,3.5,14.0,Environmental conditions alter the heat balance.
