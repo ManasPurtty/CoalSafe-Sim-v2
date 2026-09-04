@@ -60,8 +60,12 @@ def simulate_latent(scenario, time_axis):
         ox_rate   = cfg.OXIDATION_BASE_RATE * t_factor * o2_factor * s_factor
 
         if mitigating:
-            ox_rate *= 0.05   # Mitigation suppresses oxidation growth by 95%
-            recovery = 0.008  # Oxidation state recovery
+            if sid == "S07":
+                ox_rate *= 0.12   # Late mitigation is less effective at suppressing deep core oxidation
+                recovery = 0.003
+            else:
+                ox_rate *= 0.05   # Early mitigation suppresses oxidation cleanly
+                recovery = 0.008
         else:
             recovery = 0.0
 
@@ -75,7 +79,10 @@ def simulate_latent(scenario, time_axis):
                      + cfg.TEMP_DIFF_LOSS_FACTOR * max(0, deep_temp - amb_t)
                      + cfg.MOISTURE_LOSS_FACTOR * moisture)
         if mitigating:
-            heat_loss += cfg.MITIGATION_HEAT_REMOVAL
+            if sid == "S07":
+                heat_loss += 0.55  # Reduced cooling rate for severe >100°C thermal core inertia
+            else:
+                heat_loss += cfg.MITIGATION_HEAT_REMOVAL  # Strong heat removal for early mitigation
 
         net_heat = heat_gen - heat_loss
 

@@ -152,7 +152,7 @@ def generate_per_minute_graphs(latent_df=None):
             ax.set_title(f"{s_name} — Internal Temp vs Time (Minute {t})", fontsize=11, fontweight="bold")
             ax.set_xlim(0, cfg.DURATION_MIN)
             ax.set_ylim(y_min, y_max)
-            ax.legend(fontsize=8, loc="upper left", framealpha=0.95)
+            ax.legend(fontsize=8, loc="upper left", framealpha=0.95, handlelength=3.5)
             ax.grid(True, alpha=0.3)
             fig.tight_layout()
 
@@ -194,7 +194,7 @@ def generate_per_minute_graphs(latent_df=None):
         ax.set_title(f"Internal Temperature vs Time — Minute {t}", fontsize=12, fontweight="bold")
         ax.set_xlim(0, cfg.DURATION_MIN)
         ax.set_ylim(y_min, y_max)
-        ax.legend(fontsize=8, ncol=4, loc="upper left", framealpha=0.95)
+        ax.legend(fontsize=8, ncol=4, loc="upper left", framealpha=0.95, handlelength=3.5)
         ax.grid(True, alpha=0.3)
         fig.tight_layout()
 
