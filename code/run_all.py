@@ -55,6 +55,17 @@ SCENARIO_STYLES = {
     "S08": {"ls": ":",  "lw": 2.0, "marker": None},
 }
 
+SCENARIO_SCATTER_MARKERS = {
+    "S01": ("o", 22),   # Circle
+    "S02": ("s", 22),   # Square
+    "S03": ("D", 24),   # Diamond
+    "S04": ("^", 26),   # Triangle Up
+    "S05": ("*", 48),   # Star
+    "S06": ("d", 24),   # Small Diamond
+    "S07": ("h", 26),   # Hexagon
+    "S08": ("X", 26),   # Cross / X
+}
+
 def generate_plots(obs_df, latent_df, thermal_meta):
 
     gdir = cfg.GRAPHS_DIR
@@ -177,33 +188,39 @@ def generate_plots(obs_df, latent_df, thermal_meta):
     fig.savefig(gdir / "05_hotspot_area_vs_time.png", dpi=150)
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(7, 7))
+    fig, ax = plt.subplots(figsize=(8, 8))
     for sid in sids:
         dl = latent_df[latent_df["scenario_id"] == sid]
         do = obs_df[obs_df["scenario_id"] == sid]
+        marker, size = SCENARIO_SCATTER_MARKERS.get(sid, ("o", 20))
         ax.scatter(dl["internal_temperature"].values,
                    do["surface_temperature_max"].values,
-                   s=5, alpha=0.5, label=SCENARIO_DISPLAY_NAMES.get(sid, sid))
-    ax.set_xlabel("Internal Temperature (°C)")
-    ax.set_ylabel("Surface Temperature Max (°C)")
-    ax.set_title("Internal vs Surface Temperature")
-    ax.plot([25, 200], [25, 200], "k--", alpha=0.3, label="1:1 line")
-    ax.legend(fontsize=7, ncol=2)
+                   s=size, marker=marker, color=SCENARIO_COLORS.get(sid),
+                   alpha=0.75, edgecolors="none",
+                   label=SCENARIO_DISPLAY_NAMES.get(sid, sid))
+    ax.set_xlabel("Internal Temperature (°C)", fontweight="bold")
+    ax.set_ylabel("Surface Temperature Max (°C)", fontweight="bold")
+    ax.set_title("Internal vs Surface Temperature", fontweight="bold")
+    ax.plot([25, 200], [25, 200], "k--", alpha=0.4, label="1:1 line")
+    ax.legend(fontsize=8, loc="upper left", framealpha=0.95, markerscale=1.2)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(gdir / "06_internal_vs_surface_temp.png", dpi=150)
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(7, 7))
+    fig, ax = plt.subplots(figsize=(8, 8))
     for sid in sids:
         do = obs_df[obs_df["scenario_id"] == sid]
         anomaly = do["surface_temperature_max"] - do["ambient_temperature"]
+        marker, size = SCENARIO_SCATTER_MARKERS.get(sid, ("o", 20))
         ax.scatter(anomaly.values, do["risk_score"].values,
-                   s=5, alpha=0.5, label=SCENARIO_DISPLAY_NAMES.get(sid, sid))
-    ax.set_xlabel("Surface Anomaly (°C above ambient)")
-    ax.set_ylabel("Risk Score")
-    ax.set_title("Risk Score vs Surface Temperature Anomaly")
-    ax.legend(fontsize=7, ncol=2)
+                   s=size, marker=marker, color=SCENARIO_COLORS.get(sid),
+                   alpha=0.75, edgecolors="none",
+                   label=SCENARIO_DISPLAY_NAMES.get(sid, sid))
+    ax.set_xlabel("Surface Anomaly (°C above ambient)", fontweight="bold")
+    ax.set_ylabel("Risk Score", fontweight="bold")
+    ax.set_title("Risk Score vs Surface Temperature Anomaly", fontweight="bold")
+    ax.legend(fontsize=8, loc="upper left", framealpha=0.95, markerscale=1.2)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
     fig.savefig(gdir / "07_risk_vs_surface_anomaly.png", dpi=150)
