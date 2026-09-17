@@ -30,8 +30,8 @@ SCENARIO_DISPLAY_NAMES = {
     "S03": "Developing Core",
     "S04": "Heat Migration",
     "S05": "High Risk",
-    "S06": "Early Mitigation (t=45m)",
-    "S07": "Late Mitigation (t=85m)",
+    "S06": "Early Mitigation (t=360m)",
+    "S07": "Late Mitigation (t=840m)",
     "S08": "Environmental Variation",
 }
 
@@ -70,7 +70,7 @@ SCENARIO_STYLES = {
 
 
 def generate_per_minute_graphs(latent_df=None):
-    """Generate 121 per-minute cumulative Internal Temperature vs Time graphs for each scenario folder and combined."""
+    """Generate 24-hour periodic snapshot Internal Temperature vs Time graphs (sampled every 10 min) for each scenario and combined."""
 
     if latent_df is None:
         latent_path = cfg.DATA_META / "latent_state.csv"
@@ -87,7 +87,8 @@ def generate_per_minute_graphs(latent_df=None):
 
     y_min = latent_df["internal_temperature"].min() - 2
     y_max = latent_df["internal_temperature"].max() + 5
-    total_minutes = cfg.NUM_TIME_POINTS  # 121 (0 to 120)
+    interval = cfg.IMAGE_SAMPLING_INTERVAL  # 10 minutes
+    sample_timestamps = list(range(0, cfg.DURATION_MIN + 1, interval))
 
     # 1. Create folders for each scenario
     for sid in sids:
@@ -98,7 +99,7 @@ def generate_per_minute_graphs(latent_df=None):
     combined_dir = base_out_dir / "combined_all_scenarios"
     combined_dir.mkdir(parents=True, exist_ok=True)
 
-    print(f"  [PER-MIN] Generating per-minute graphs for each scene under {base_out_dir} ...")
+    print(f"  [PER-MIN] Generating periodic snapshot graphs (every {interval}m) for 24-hour simulation under {base_out_dir} ...")
 
     # Get baseline S01 data for reference comparison in individual scenario graphs
     s01_data = latent_df[latent_df["scenario_id"] == "S01"]
@@ -111,7 +112,7 @@ def generate_per_minute_graphs(latent_df=None):
         st = SCENARIO_STYLES[sid]
         d_scenario = latent_df[latent_df["scenario_id"] == sid]
 
-        for t in range(total_minutes):
+        for t in sample_timestamps:
             fig, ax = plt.subplots(figsize=(10, 5))
 
             # Reference baseline line S01 (if current scenario is not S01)
@@ -142,29 +143,29 @@ def generate_per_minute_graphs(latent_df=None):
             )
 
             # Annotations for mitigation triggers
-            if sid == "S06" and t >= 45:
-                ax.axvline(45, color="#16a34a", linestyle="--", alpha=0.7, label="Early Mitigation Trigger (t=45m)")
-            elif sid == "S07" and t >= 85:
-                ax.axvline(85, color="#9333ea", linestyle="--", alpha=0.7, label="Late Mitigation Trigger (t=85m)")
+            if sid == "S06" and t >= 360:
+                ax.axvline(360, color="#16a34a", linestyle="--", alpha=0.7, label="Early Mitigation Trigger (t=360m / 6h)")
+            elif sid == "S07" and t >= 840:
+                ax.axvline(840, color="#9333ea", linestyle="--", alpha=0.7, label="Late Mitigation Trigger (t=840m / 14h)")
 
             ax.set_xlabel("Time (min)", fontsize=10, fontweight="bold")
             ax.set_ylabel("Internal Temperature (°C)", fontsize=10, fontweight="bold")
-            ax.set_title(f"{s_name} — Internal Temp vs Time (Minute {t})", fontsize=11, fontweight="bold")
+            ax.set_title(f"{s_name} — Internal Temp vs Time (Minute {t} / {t/60:.1f}h)", fontsize=11, fontweight="bold")
             ax.set_xlim(0, cfg.DURATION_MIN)
             ax.set_ylim(y_min, y_max)
             ax.legend(fontsize=8, loc="upper left", framealpha=0.95, handlelength=3.5)
             ax.grid(True, alpha=0.3)
             fig.tight_layout()
 
-            filename = f"internal_temp_minute_{t:03d}.png"
+            filename = f"internal_temp_minute_{t:04d}.png"
             fig.savefig(s_dir / filename, dpi=100)
             plt.close(fig)
 
-        print(f"           Scene {sid} ({s_name}): 121 per-minute images saved to {folder_name}/")
+        print(f"           Scene {sid} ({s_name}): {len(sample_timestamps)} snapshot images saved to {folder_name}/")
 
     # 2. Combined per-minute graphs
-    print("  [PER-MIN] Generating combined 8-scenario per-minute graphs ...")
-    for t in range(total_minutes):
+    print(f"  [PER-MIN] Generating combined 8-scenario snapshot graphs (every {interval}m) ...")
+    for t in sample_timestamps:
         fig, ax = plt.subplots(figsize=(12, 5.5))
 
         for sid in sids:
@@ -184,21 +185,21 @@ def generate_per_minute_graphs(latent_df=None):
                 markersize=5,
             )
 
-        if t >= 45:
-            ax.axvline(45, color="#16a34a", linestyle=":", alpha=0.5, label="_nolegend_")
-        if t >= 85:
-            ax.axvline(85, color="#9333ea", linestyle=":", alpha=0.5, label="_nolegend_")
+        if t >= 360:
+            ax.axvline(360, color="#16a34a", linestyle=":", alpha=0.5, label="_nolegend_")
+        if t >= 840:
+            ax.axvline(840, color="#9333ea", linestyle=":", alpha=0.5, label="_nolegend_")
 
         ax.set_xlabel("Time (min)", fontsize=10, fontweight="bold")
         ax.set_ylabel("Internal Temperature (°C)", fontsize=10, fontweight="bold")
-        ax.set_title(f"Internal Temperature vs Time — Minute {t}", fontsize=12, fontweight="bold")
+        ax.set_title(f"Internal Temperature vs Time — Minute {t} ({t/60:.1f}h)", fontsize=12, fontweight="bold")
         ax.set_xlim(0, cfg.DURATION_MIN)
         ax.set_ylim(y_min, y_max)
         ax.legend(fontsize=8, ncol=4, loc="upper left", framealpha=0.95, handlelength=3.5)
         ax.grid(True, alpha=0.3)
         fig.tight_layout()
 
-        filename = f"internal_temp_minute_{t:03d}.png"
+        filename = f"internal_temp_minute_{t:04d}.png"
         fig.savefig(base_out_dir / filename, dpi=100)
         fig.savefig(combined_dir / filename, dpi=100)
         plt.close(fig)

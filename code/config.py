@@ -13,23 +13,25 @@ DOCS_DIR     = ROOT / "documentation"
 
 RANDOM_SEED = 42
 
-DURATION_MIN    = 120
+DURATION_MIN    = 1440
 TIME_STEP_MIN   = 1
-NUM_TIME_POINTS = 121
+NUM_TIME_POINTS = 1441
 GRID_SIZE       = 50
 NUM_DEPTH_LAYERS = 3
 
-DEFAULT_AMBIENT_TEMP   = 30.0
+IMAGE_SAMPLING_INTERVAL = 10  # Sample thermal images & snapshot graphs every 10 min
+
+DEFAULT_AMBIENT_TEMP   = 28.0
 DEFAULT_HUMIDITY       = 55.0
 DEFAULT_WIND_SPEED     = 2.5
 DEFAULT_COAL_MOISTURE  = 12.0
 
-ENV_DRIFT_AMBIENT  = 1.5
-ENV_DRIFT_HUMIDITY = 3.0
-ENV_DRIFT_WIND     = 0.5
+ENV_DRIFT_AMBIENT  = 6.0   # Diurnal day/night temperature amplitude (±6°C)
+ENV_DRIFT_HUMIDITY = 15.0  # Daily humidity swing
+ENV_DRIFT_WIND     = 1.2   # Daily wind variation
 
-# ── Oxidation & Heat Transfer Calibration ──────────────────────
-OXIDATION_BASE_RATE       = 0.009   # Base oxidation increment per minute
+# ── Oxidation & Heat Transfer Calibration (24-Hour Scale) ──────
+OXIDATION_BASE_RATE       = 0.00075 # Base oxidation increment per minute
 OXIDATION_TEMP_SCALE      = 0.024   # Arrhenius temperature sensitivity
 OXIDATION_TEMP_REF        = 30.0    # Reference temperature (°C)
 OXIDATION_O2_HALF         = 10.0    # O₂ half-saturation (%)
@@ -38,24 +40,24 @@ OXIDATION_MAX             = 1.0     # Max oxidation state
 HEAT_COEFFICIENT          = 70.0    # Heat output per unit oxidation_rate
 HEAT_TEMP_FEEDBACK        = 0.018   # Positive feedback multiplier
 
-BASE_HEAT_LOSS            = 0.010   # Conductive base loss
-WIND_HEAT_LOSS_FACTOR     = 0.003   # Convective loss per m/s wind
-TEMP_DIFF_LOSS_FACTOR     = 0.002   # Gradient loss to ambient
-MOISTURE_LOSS_FACTOR      = 0.001   # Moisture latent heat loss
-MITIGATION_HEAT_REMOVAL   = 1.30    # Strong heat extraction rate when mitigation is active
+BASE_HEAT_LOSS            = 0.0010  # Conductive base loss
+WIND_HEAT_LOSS_FACTOR     = 0.0003  # Convective loss per m/s wind
+TEMP_DIFF_LOSS_FACTOR     = 0.0002  # Gradient loss to ambient
+MOISTURE_LOSS_FACTOR      = 0.0001  # Moisture latent heat loss
+MITIGATION_HEAT_REMOVAL   = 0.110   # Strong heat extraction rate for early mitigation
 
-DEEP_HEAT_ABSORPTION      = 0.90    # Layer 0 deep core heat absorption
-MIDDLE_RESPONSE_RATE      = 0.05    # Layer 1 middle layer response
-NEAR_SURFACE_RESPONSE     = 0.03    # Layer 2 near-surface response
-SURFACE_OBS_RESPONSE      = 0.02    # Surface sensor response
+DEEP_HEAT_ABSORPTION      = 0.85    # Layer 0 deep core heat absorption
+MIDDLE_RESPONSE_RATE      = 0.006   # Layer 1 middle layer response
+NEAR_SURFACE_RESPONSE     = 0.004   # Layer 2 near-surface response
+SURFACE_OBS_RESPONSE      = 0.003   # Surface sensor response
 
 CO_BASELINE               = 2.0
 CO2_BASELINE              = 400.0
 O2_BASELINE               = 20.9
 CO_RESPONSE_COEFF         = 600.0
 CO2_RESPONSE_COEFF        = 1200.0
-O2_CONSUMPTION_COEFF      = 15.0
-GAS_LAG_FACTOR            = 0.20
+O2_CONSUMPTION_COEFF      = 1.5
+GAS_LAG_FACTOR            = 0.03
 O2_FLOOR                  = 5.0
 O2_CEIL                   = 21.0
 
@@ -73,7 +75,7 @@ HOTSPOT_ANOMALY_MARGIN = 2.0
 
 THERMAL_CMAP       = "inferno"
 THERMAL_BLUR_SIGMA = 2.5
-THERMAL_SAVE_EVERY = 1
+THERMAL_SAVE_EVERY = 10
 
 RISK_WEIGHTS = {
     "oxidation":        0.15,

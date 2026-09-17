@@ -6,6 +6,7 @@ import math
 
 import numpy as np
 import pandas as pd
+import config as cfg
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
@@ -67,9 +68,10 @@ def main():
         f"Found {n_scen} scenarios, expected 8") else 1
 
     counts = df.groupby("scenario_id").size()
-    wrong = counts[counts != 121]
+    expected_rows = cfg.NUM_TIME_POINTS  # 1441 rows for 24 hours
+    wrong = counts[counts != expected_rows]
     errors += 0 if check(wrong.empty,
-        "All scenarios have exactly 121 rows",
+        f"All scenarios have exactly {expected_rows} rows",
         f"Wrong row counts: {wrong.to_dict()}") else 1
 
     dups = df.duplicated(subset=["scenario_id", "timestamp_min"])

@@ -64,11 +64,13 @@ def run_verification_demo():
     dec1, msg1 = evaluate_cross_modal_decision(r_tab1, r_th1)
     print(f"  Decision : {dec1}\n  Details  : {msg1}")
     
-    print("\n[TEST CASE 2] Confirmed High Risk Event (S05, Minute 90)")
-    r_tab2 = df_tab[(df_tab["scenario_id"] == "S05") & (df_tab["timestamp_min"] == 90)].iloc[0]
-    r_th2  = df_therm[(df_therm["scenario_id"] == "S05") & (df_therm["timestamp_min"] == 90)].iloc[0]
+    print("\n[TEST CASE 2] Confirmed High Risk Event (S05)")
+    s05_high = df_tab[(df_tab["scenario_id"] == "S05") & (df_tab["risk_score"] >= 60.0)]
+    t_test = int(s05_high["timestamp_min"].iloc[len(s05_high)//2]) if len(s05_high) > 0 else 900
+    r_tab2 = df_tab[(df_tab["scenario_id"] == "S05") & (df_tab["timestamp_min"] == t_test)].iloc[0]
+    r_th2  = df_therm[(df_therm["scenario_id"] == "S05") & (df_therm["timestamp_min"] == t_test)].iloc[0]
     dec2, msg2 = evaluate_cross_modal_decision(r_tab2, r_th2)
-    print(f"  Decision : {dec2}\n  Details  : {msg2}")
+    print(f"  Timestamp: Minute {t_test} ({t_test//60}h {t_test%60}m)\n  Decision : {dec2}\n  Details  : {msg2}")
     
     print("\n[TEST CASE 3] Injected Conflict Test (Faulty CO Sensor = 250 ppm on Normal S01)")
     r_tab3 = r_tab1.copy()

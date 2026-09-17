@@ -28,8 +28,8 @@ SCENARIO_DISPLAY_NAMES = {
     "S03": "Developing Core",
     "S04": "Heat Migration",
     "S05": "High Risk",
-    "S06": "Early Mitigation (t=45m)",
-    "S07": "Late Mitigation (t=85m)",
+    "S06": "Early Mitigation (t=360m)",
+    "S07": "Late Mitigation (t=840m)",
     "S08": "Environmental Variation",
 }
 
@@ -88,11 +88,11 @@ def generate_plots(obs_df, latent_df, thermal_meta):
             markevery=12 if st["marker"] else None,
             markersize=5
         )
-    ax.axvline(45, color="#16a34a", linestyle=":", alpha=0.4, label="_nolegend_")
-    ax.axvline(85, color="#9333ea", linestyle=":", alpha=0.4, label="_nolegend_")
-    ax.set_xlabel("Time (min)", fontweight="bold")
+    ax.axvline(360, color="#16a34a", linestyle=":", alpha=0.4, label="_nolegend_")
+    ax.axvline(840, color="#9333ea", linestyle=":", alpha=0.4, label="_nolegend_")
+    ax.set_xlabel("Time (min) [24-Hour Timeline]", fontweight="bold")
     ax.set_ylabel("Internal Temperature (°C)", fontweight="bold")
-    ax.set_title("Internal Temperature vs Time", fontweight="bold")
+    ax.set_title("24-Hour Internal Temperature vs Time", fontweight="bold")
     ax.legend(fontsize=8, ncol=4, loc="upper left", framealpha=0.95, handlelength=3.5)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
@@ -114,9 +114,9 @@ def generate_plots(obs_df, latent_df, thermal_meta):
             markevery=12 if st["marker"] else None,
             markersize=5
         )
-    ax.set_xlabel("Time (min)", fontweight="bold")
+    ax.set_xlabel("Time (min) [24-Hour Timeline]", fontweight="bold")
     ax.set_ylabel("Surface Temp Max (°C)", fontweight="bold")
-    ax.set_title("Surface Temperature (Max) vs Time", fontweight="bold")
+    ax.set_title("24-Hour Surface Temperature (Max) vs Time", fontweight="bold")
     ax.legend(fontsize=8, ncol=4, loc="upper left", framealpha=0.95, handlelength=3.5)
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
@@ -131,10 +131,10 @@ def generate_plots(obs_df, latent_df, thermal_meta):
         axes[1].plot(d["timestamp_min"], d["CO2"], label=SCENARIO_DISPLAY_NAMES.get(sid, sid), color=SCENARIO_COLORS.get(sid), linestyle=st["ls"], lw=st["lw"])
         axes[2].plot(d["timestamp_min"], d["O2"], label=SCENARIO_DISPLAY_NAMES.get(sid, sid), color=SCENARIO_COLORS.get(sid), linestyle=st["ls"], lw=st["lw"])
     axes[0].set_ylabel("CO (ppm)", fontweight="bold")
-    axes[0].set_title("Gas Concentrations vs Time", fontweight="bold")
+    axes[0].set_title("24-Hour Gas Concentrations vs Time", fontweight="bold")
     axes[1].set_ylabel("CO2 (ppm)", fontweight="bold")
     axes[2].set_ylabel("O2 (%)", fontweight="bold")
-    axes[2].set_xlabel("Time (min)", fontweight="bold")
+    axes[2].set_xlabel("Time (min) [24-Hour Timeline]", fontweight="bold")
     for ax in axes:
         ax.legend(fontsize=7, ncol=4, loc="upper left", framealpha=0.95, handlelength=3.5)
         ax.grid(True, alpha=0.3)

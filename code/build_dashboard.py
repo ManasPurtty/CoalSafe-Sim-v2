@@ -767,12 +767,12 @@ def main():
                     
                     <div class="scrubber-controls">
                         <button class="play-btn" id="playBtn">▶ Play</button>
-                        <input type="range" min="0" max="120" value="0" class="scrubber-slider" id="timeSlider">
-                        <div class="time-display" id="timeDisplay">0 min</div>
+                        <input type="range" min="0" max="1440" step="10" value="0" class="scrubber-slider" id="timeSlider">
+                        <div class="time-display" id="timeDisplay">0h 0m (0 min)</div>
                     </div>
 
                     <div style="font-size: 11px; color: var(--text-muted); text-align: center;">
-                        Move the slider or play to scrub through thermal frames synchronized with sub-surface temperature & gas signals.
+                        Move the slider or play to scrub through thermal frames synchronized with sub-surface temperature & gas signals (10 min sampling).
                     </div>
                 </div>
             </div>
@@ -948,7 +948,9 @@ def main():
             if (!data) return;
 
             const t = currentTimestep;
-            document.getElementById('timeDisplay').innerText = `${{t}} min`;
+            const hours = Math.floor(t / 60);
+            const mins = t % 60;
+            document.getElementById('timeDisplay').innerText = `${{hours}}h ${{mins}}m (${{t}} min)`;
 
             // Update Charts Data
             depthTempChart.data.labels = data.timestamps;
@@ -1036,11 +1038,11 @@ def main():
                 dotConveyor.className = 'status-dot';
             }}
 
-            // Risk Trajectory Forecast (+1h, +2h, +4h, +6h) Calculation using dataset future progression & rate of rise
-            const idx1h = Math.min(120, t + 30);  // +30 min in sim scale (~1h operational time scale)
-            const idx2h = Math.min(120, t + 60);  // +60 min in sim scale (~2h operational)
-            const idx4h = Math.min(120, t + 90);  // +90 min
-            const idx6h = Math.min(120, t + 120); // +120 min
+            // Risk Trajectory Forecast (+1h, +2h, +4h, +6h) Calculation
+            const idx1h = Math.min(1440, t + 60);
+            const idx2h = Math.min(1440, t + 120);
+            const idx4h = Math.min(1440, t + 240);
+            const idx6h = Math.min(1440, t + 360);
 
             const f1h = data.risk_score[idx1h] !== undefined ? data.risk_score[idx1h] : currentRisk;
             const f2h = data.risk_score[idx2h] !== undefined ? data.risk_score[idx2h] : f1h;
@@ -1052,7 +1054,7 @@ def main():
 
             // Hourly rate calculation
             const futureDelta = f1h - currentRisk;
-            const ratePerHour = futureDelta * 2; // rate over next operational hour
+            const ratePerHour = futureDelta;
             document.getElementById('forecastDelta').innerText = `${{ratePerHour >= 0 ? '+' : ''}}${{ratePerHour.toFixed(1)}}% / hr`;
 
             // Draw Spatial Thermal Canvas Heatmap
@@ -1082,7 +1084,7 @@ def main():
                     const heat = strength * Math.exp(-distSq / (2 * radius * radius));
                     const temp = 30 + heat;
 
-                    // Inferno colormap mock
+                    // Colormap mapping
                     const norm = Math.min(1, Math.max(0, (temp - 30) / 40));
                     const idx = (y * 50 + x) * 4;
 
@@ -1108,7 +1110,7 @@ def main():
             if (isPlaying) {{
                 btn.innerText = '⏸ Pause';
                 playInterval = setInterval(() => {{
-                    currentTimestep = (currentTimestep + 1) % 121;
+                    currentTimestep = (currentTimestep + 10 > 1440) ? 0 : currentTimestep + 10;
                     document.getElementById('timeSlider').value = currentTimestep;
                     updateDashboard();
                 }}, 150);

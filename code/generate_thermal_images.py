@@ -25,8 +25,15 @@ def generate_thermal_images(latent_df, obs_df):
         img_dir.mkdir(parents=True, exist_ok=True)
 
         n = len(rows_lat)
-        n_skip = max(1, int(n * cfg.MISSING_THERMAL_FRACTION))
-        skip_indices = set(rng.choice(n, size=n_skip, replace=False))
+        interval = cfg.IMAGE_SAMPLING_INTERVAL  # 10 minutes
+        sampled_indices = [idx for idx in range(n) if int(rows_lat.iloc[idx]["timestamp_min"]) % interval == 0]
+        n_sampled = len(sampled_indices)
+        
+        # 2 deliberate missing images per scenario among sampled frames
+        n_skip = max(1, min(2, int(n_sampled * cfg.MISSING_THERMAL_FRACTION)))
+        skip_sampled = set(rng.choice(sampled_indices, size=n_skip, replace=False))
+
+        saved_count = 0
 
         for idx in range(n):
             r_lat = rows_lat.iloc[idx]
@@ -77,10 +84,15 @@ def generate_thermal_images(latent_df, obs_df):
             s_mean = round(float(grid.mean()), 2)
             s_max = round(float(grid.max()), 2)
 
-            img_fname = f"t{t:03d}.png"
+            # Map to the nearest 10-minute sampled frame for continuous scrubber playback
+            sampled_t = (t // interval) * interval
+            img_fname = f"t{sampled_t:04d}.png"
             rel_path = f"data/thermal/{sid}/{img_fname}"
 
-            if idx in skip_indices:
+            is_sampled_time = (t % interval == 0)
+            is_skipped = (sampled_t in skip_sampled)
+
+            if is_skipped:
                 meta_rows.append({
                     "scenario_id": sid,
                     "timestamp_min": t,
@@ -94,10 +106,12 @@ def generate_thermal_images(latent_df, obs_df):
                 })
                 continue
 
-            vmin = amb - 2
-            vmax = max(amb + 20, grid.max() + 1)
-            plt.imsave(str(cfg.DATA_THERMAL / sid / img_fname),
-                       grid, cmap=cfg.THERMAL_CMAP, vmin=vmin, vmax=vmax)
+            if is_sampled_time:
+                vmin = amb - 2
+                vmax = max(amb + 20, grid.max() + 1)
+                plt.imsave(str(cfg.DATA_THERMAL / sid / img_fname),
+                           grid, cmap=cfg.THERMAL_CMAP, vmin=vmin, vmax=vmax)
+                saved_count += 1
 
             meta_rows.append({
                 "scenario_id": sid,
@@ -111,8 +125,8 @@ def generate_thermal_images(latent_df, obs_df):
                 "hotspot_present": h_present,
             })
 
-        print(f"  [THERMAL] {sid} — {n - len(skip_indices)} images saved, "
-              f"{len(skip_indices)} deliberately missing")
+        print(f"  [THERMAL] {sid} — {saved_count} images saved (sampled every {interval}m), "
+              f"{len(skip_sampled)} deliberately missing blocks")
 
     return pd.DataFrame(meta_rows)
 

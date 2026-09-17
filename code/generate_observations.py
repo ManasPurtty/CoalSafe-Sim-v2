@@ -71,22 +71,22 @@ def generate_observations(latent_df):
             heating_rate = surf_obs - prev_surf if idx > 0 else 0.0
             prev_surf = surf_obs
 
-            anomaly = near_surf - r["_ambient"]
-            if anomaly > cfg.HOTSPOT_ANOMALY_MARGIN:
-                
+            anomaly = max(0.0, near_surf - r["_ambient"])
+            if r["oxidation_state"] >= 0.10 and anomaly > cfg.HOTSPOT_ANOMALY_MARGIN:
                 sigma = min(cfg.HOTSPOT_INITIAL_RADIUS
                             + cfg.HOTSPOT_GROWTH_RATE * r["oxidation_state"] * 100,
                             cfg.HOTSPOT_MAX_RADIUS)
                 area = int(np.clip(np.pi * sigma**2 * (anomaly / 5.0), 1, 2500))
                 hx = sc["core_x"] + rng.normal(0, 0.5)
                 hy = sc["core_y"] + rng.normal(0, 0.5)
+                surf_max = surf_obs + anomaly * 0.6
             else:
                 area = 0
                 hx = float("nan")
                 hy = float("nan")
+                surf_max = surf_obs + abs(rng.normal(0, 0.2))
 
             surf_mean = surf_obs
-            surf_max  = surf_obs + max(0, anomaly * 0.6)
 
             ox_sev     = _sev(r["oxidation_state"],
                               cfg.RISK_NORM["oxidation_max"])
