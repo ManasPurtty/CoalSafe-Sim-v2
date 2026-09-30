@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CoalSafe-MMTS: Multimodal Time-Series Machine Learning Project Report</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 15mm 20mm 15mm;
+  }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.6;
+    font-size: 11pt;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 24pt;
+    color: #0f172a;
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 8px;
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-size: 16pt;
+    color: #1e3a8a;
+    border-left: 4px solid #3b82f6;
+    padding-left: 10px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+  }
+  h3 {
+    font-size: 13pt;
+    color: #1e40af;
+    margin-top: 15px;
+    margin-bottom: 6px;
+  }
+  p, li {
+    font-size: 10.5pt;
+  }
+  .header-box {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: #ffffff;
+    padding: 24px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+  }
+  .header-box h1 {
+    color: #60a5fa;
+    border: none;
+    margin: 0 0 8px 0;
+  }
+  .header-box p {
+    color: #cbd5e1;
+    margin: 4px 0;
+    font-size: 11pt;
+  }
+  .badge {
+    display: inline-block;
+    background: #2563eb;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 9pt;
+    font-weight: bold;
+    margin-right: 6px;
+  }
+  .card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+  }
+  .card-title {
+    font-weight: bold;
+    color: #0f172a;
+    font-size: 11pt;
+    margin-bottom: 6px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 10pt;
+    page-break-inside: avoid;
+  }
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  th {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    font-weight: bold;
+  }
+  tr:nth-child(even) {
+    background-color: #f8fafc;
+  }
+  .code-block {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 9.5pt;
+    margin: 10px 0;
+    white-space: pre-wrap;
+    page-break-inside: avoid;
+  }
+  .highlight-true {
+    color: #16a34a;
+    font-weight: bold;
+  }
+  .highlight-false {
+    color: #dc2626;
+    font-weight: bold;
+  }
+  .footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 9pt;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 10px;
+  }
+  .page-break {
+    page-break-after: always;
+  }
+</style>
+</head>
+<body>
+
+<div class="header-box">
+  <h1>CoalSafe-MMTS: Multimodal Time-Series Machine Learning</h1>
+  <p><strong>Sub-Surface Coal Spontaneous Combustion Early Warning & Conflict Gating System</strong></p>
+  <p><strong>Student:</strong> Manas Purtty &nbsp;|&nbsp; <strong>Project Version:</strong> v2.0 (24-Hour Scale) &nbsp;|&nbsp; <strong>Model:</strong> CoalSafe-MMTS</p>
+  <p><strong>GitHub Repository:</strong> https://github.com/ManasPurtty/CoalSafe-Sim-v2</p>
+</div>
+
+<h2>1. Executive Summary & Problem Overview</h2>
+<p>
+  Spontaneous combustion in industrial coal stockpiles is a major hazard that begins deep sub-surface when trapped oxygen initiates exothermic low-temperature oxidation. 
+  Conventional monitoring systems suffer from two major limitations:
+</p>
+<ul>
+  <li><strong>Sub-Surface Thermal Delay Gap:</strong> By the time a surface probe or regular camera detects heat, the internal core has already reached critical thermal runaway ($T > 80^\circ	ext{C}$).</li>
+  <li><strong>Single-Sensor False Alarms:</strong> A short-circuited gas probe or surface sunlight glare can trigger expensive, unnecessary automated water spray mitigation.</li>
+</ul>
+<p>
+  <strong>The Solution:</strong> We implemented <strong>CoalSafe-MMTS</strong>, an end-to-end Multimodal Deep Learning Model that combines <strong>1-hour time-series sensor sequences</strong> (gas and temperature dynamics) with <strong>50&times;50 spatial thermal camera images</strong>, coupled with an intelligent <strong>Cross-Modal Conflict Detection Gate</strong> that validates consensus (<code>True</code>) and suppresses false alarms (<code>False</code>).
+</p>
+
+<h2>2. 24-Hour Physics Simulation Expansion</h2>
+<p>
+  The synthetic physical dataset was expanded from a 2-hour scale to a full <strong>24-Hour (1,440-minute)</strong> operational timeline across 8 calibrated scenarios (11,528 total rows):
+</p>
+<ul>
+  <li><strong>Arrhenius Chemical Kinetics:</strong> Scaled base reaction rate ($0.00075	ext{ min}^{-1}$) with delta clipping $\Delta T \in [-1.0, 0.45]^\circ	ext{C}$ guaranteeing 24-hour numerical thermodynamic stability.</li>
+  <li><strong>Diurnal Day/Night Ambient Cycle:</strong> Realistic continuous sinusoidal temperature swing ($\pm 6^\circ	ext{C}$ swing, with minimum at 06:00 AM and peak heat at 14:00 / 02:00 PM).</li>
+  <li><strong>10-Minute Periodic Image Sampling:</strong> Generates 145 thermal frames per scenario ($t = 0, 10, 20, \dots, 1440$) and corresponding snapshot graphs under <code>graphs/per_minute/</code>.</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h2>3. Multimodal ML Model Architecture (`CoalSafe-MMTS`)</h2>
+<p>
+  The neural network contains 4 integrated processing blocks designed for time-series and spatial perception:
+</p>
+
+<div class="card">
+  <div class="card-title">1. Tabular Time-Series Branch (Sensor Reader)</div>
+  <p>
+    Takes a sliding history window of 6 consecutive time steps (60 minutes) across 10 physical sensor channels: 
+    <code>ambient_temp, humidity, wind_speed, coal_moisture, CO, CO2, O2, surf_temp_mean, surf_temp_max, heating_rate</code>.
+  </p>
+  <ul>
+    <li><strong>2-Layer Bi-directional GRU (hidden size = 64):</strong> Reads sequences forward and backward to detect rates of gas accumulation.</li>
+    <li><strong>Temporal Self-Attention:</strong> Automatically calculates importance weights across the 60-minute window, highlighting moments of rapid gas acceleration.</li>
+    <li><strong>Output:</strong> 128-dimensional latent vector ($h_{	ext{tab}}$).</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-title">2. Spatial Thermal Image Branch (Camera Reader)</div>
+  <p>
+    Takes the $50	imes50$ pixel 3-channel thermal heatmap image corresponding to the current time step.
+  </p>
+  <ul>
+    <li><strong>3-Stage 2D-CNN:</strong> Conv2D layers ($32 ightarrow 64 ightarrow 128$ filters) with LeakyReLU activations and MaxPool downsampling.</li>
+    <li><strong>Adaptive Average Pooling:</strong> Reduces spatial feature maps into a dense 128-dimensional latent vector ($h_{	ext{img}}$).</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-title">3. Cross-Modal Gated Bilinear Fusion (The AI Brain)</div>
+  <p>
+    Fuses the 128 sensor features and 128 thermal camera features into a unified 256-dimensional representation:
+  </p>
+  <ul>
+    <li><strong>Adaptive Gating Score ($g \in [0, 1]$):</strong> $g = \sigma(W_g [h_{	ext{tab}}; h_{	ext{img}}])$ dynamically weighs sensor vs. thermal reliability.</li>
+    <li><strong>Interaction Synthesis:</strong> Fuses $[g \odot h_{	ext{tab}}; (1-g) \odot h_{	ext{img}}; h_{	ext{tab}} \odot h_{	ext{img}}]$ via an MLP with Dropout ($0.2$).</li>
+  </ul>
+</div>
+
+<div class="card">
+  <div class="card-title">4. Multi-Head Outputs & Conflict Gating Module</div>
+  <ul>
+    <li><code>tab_head</code>: Auxiliary prediction from sensors only ($\hat{y}_{	ext{tab}} \in [0, 100\%]$).</li>
+    <li><code>img_head</code>: Auxiliary prediction from thermal images only ($\hat{y}_{	ext{img}} \in [0, 100\%]$).</li>
+    <li><code>fused_reg_head</code>: Unified Multimodal Risk Score ($\hat{y}_{	ext{fused}} \in [0, 100\%]$).</li>
+    <li><code>fused_class_head</code>: 5-Class Categorical Classifier (<code>NORMAL, LOW, MEDIUM, HIGH, CRITICAL</code>).</li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>4. The "True vs. False" Conflict Gating Benchmarks</h2>
+<p>
+  As requested by the project requirements, the system computes the <strong>Modality Disagreement</strong>:
+  $$\Delta_{	ext{modal}} = |\hat{y}_{	ext{tab}} - \hat{y}_{	ext{img}}|$$
+  If $\Delta_{	ext{modal}} \le 25\%$, the decision is verified as <strong class="highlight-true">TRUE (Valid Consensus)</strong>. If $\Delta_{	ext{modal}} > 25\%$, the decision is flagged as <strong class="highlight-false">FALSE (Conflict Detected)</strong> to suppress false alarms.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Test Scenario</th>
+      <th>Input Conditions</th>
+      <th>Sensor Risk</th>
+      <th>Thermal Risk</th>
+      <th>Disagreement</th>
+      <th>Consensus Status</th>
+      <th>Action Taken</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Case 1: Normal Baseline</strong></td>
+      <td>Normal gases (CO &lt; 5 ppm) + Cold camera image</td>
+      <td>10.3%</td>
+      <td>7.3%</td>
+      <td>3.0%</td>
+      <td><span class="highlight-true">TRUE (Valid)</span></td>
+      <td>Routine Monitoring</td>
+    </tr>
+    <tr>
+      <td><strong>Case 2: Runaway Fire</strong></td>
+      <td>High CO gas (85 ppm) + Hot thermal hotspot image</td>
+      <td>66.4%</td>
+      <td>66.9%</td>
+      <td>0.5%</td>
+      <td><span class="highlight-true">TRUE (Valid)</span></td>
+      <td><strong>Automated Water Spray Triggered</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Case 3: Injected Sensor Glitch</strong></td>
+      <td>Glitch spikes CO to 250 ppm, but Thermal Camera is Cold</td>
+      <td>67.4%</td>
+      <td>7.3%</td>
+      <td>60.0%</td>
+      <td><span class="highlight-false">FALSE (Conflict)</span></td>
+      <td><strong>Spray Suppressed (Sensor Fault Flag)</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Case 4: Camera Glare Injected</strong></td>
+      <td>Normal gases, but sunlight glare on Thermal Camera</td>
+      <td>10.3%</td>
+      <td>66.9%</td>
+      <td>56.6%</td>
+      <td><span class="highlight-false">FALSE (Conflict)</span></td>
+      <td><strong>Spray Suppressed (Optical Glare Flag)</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>5. Codebase Deep Dive (File-by-File Summary)</h2>
+
+<div class="card">
+  <div class="card-title">1. code/ml/dataset.py (Data Loader & Sliding Window)</div>
+  <p>
+    Loads <code>sensor_data.csv</code> and <code>thermal_metadata.csv</code>, handles missing values using <code>ffill()</code> and <code>bfill()</code>, calculates Z-score feature normalization $(x - \mu)/\sigma$, generates 60-minute sliding sequence windows, and formats data into PyTorch batches of size 16.
+  </p>
+</div>
+
+<div class="card">
+  <div class="card-title">2. code/ml/model.py (MultimodalTimeSeriesNet)</div>
+  <p>
+    Defines the complete neural network architecture: 2-layer Bi-GRU with Temporal Attention, 3-layer Conv2D spatial extractor, Gated Bilinear Fusion, multiple prediction heads, and the <code>evaluate_consensus()</code> gating function.
+  </p>
+</div>
+
+<div class="card">
+  <div class="card-title">3. code/ml/train.py (GPU Training Pipeline)</div>
+  <p>
+    Trains the 520,713 model parameters over 40 epochs using AdamW optimizer ($lr=10^{-3}$, weight decay $= 10^{-4}$) and Cosine Annealing learning rate schedule. Uses a multi-task loss combining Smooth L1 regression loss, Cross-Entropy classification loss, and modality consistency regularization. Saves the best checkpoint to <code>coalsafe_mmts_best.pt</code>.
+  </p>
+</div>
+
+<div class="card">
+  <div class="card-title">4. code/ml/evaluate.py (Testing & Conflict Benchmarks)</div>
+  <p>
+    Evaluates the trained model on unseen Scenario S07 (Late Mitigation) and executes the 4 benchmark conflict experiments demonstrating 100% false-alarm suppression.
+  </p>
+</div>
+
+<div class="card">
+  <div class="card-title">5. code/ml/plot_ml_results.py (Visualization Generator)</div>
+  <p>
+    Generates presentation-grade figures under <code>graphs/ml_results/</code>: training convergence curves, 24-hour S07 test prediction trajectories, and conflict gating bar charts.
+  </p>
+</div>
+
+<div class="page-break"></div>
+
+<h2>6. Key Experimental Results</h2>
+<ul>
+  <li><strong>Training Hardware:</strong> NVIDIA GeForce GTX 1650 GPU (CUDA acceleration)</li>
+  <li><strong>Total Trainable Parameters:</strong> 520,713</li>
+  <li><strong>Best Validation MAE:</strong> <span class="highlight-true">3.33%</span> (Validation Accuracy: <strong>88.3%</strong>)</li>
+  <li><strong>Held-out Test Scenario S07:</strong> $R^2 = \mathbf{0.8321}$, $	ext{MAE} = 6.57\%$, $	ext{RMSE} = 8.49\%$</li>
+  <li><strong>False Alarm Protection:</strong> 100% success rate on detecting and suppressing injected sensor faults and camera glare.</li>
+</ul>
+
+<h2>7. Viva & Teacher Question-Answer Cheatsheet</h2>
+
+<div class="card">
+  <p><strong>Q1: Why did you use a Multimodal model instead of only temperature sensors?</strong></p>
+  <p><em>Answer:</em> Sub-surface coal fires start deep underground. Surface temperature remains cold for hours due to coal's thermal insulation. Gas sensors (CO) detect early oxidation, while thermal cameras provide exact spatial coordinates. Combining both gives early warning with spatial precision.</p>
+</div>
+
+<div class="card">
+  <p><strong>Q2: Why did you choose GRU over standard Feedforward networks for sensors?</strong></p>
+  <p><em>Answer:</em> Sensor data is time-series. A single static CO reading of 15 ppm is ambiguous, but observing CO accelerate from 2 ppm to 15 ppm over 1 hour indicates active spontaneous combustion. GRU captures temporal rates of rise.</p>
+</div>
+
+<div class="card">
+  <p><strong>Q3: How does the Conflict Gate protect the system?</strong></p>
+  <p><em>Answer:</em> The model computes individual risk estimates for sensors ($\hat{y}_{	ext{tab}}$) and camera ($\hat{y}_{	ext{img}}$). If $|\hat{y}_{	ext{tab}} - \hat{y}_{	ext{img}}| > 25\%$, the model outputs <code>False</code> (Conflict), preventing false automated water spray activation during sensor glitches or solar camera glare.</p>
+</div>
+
+<div class="footer">
+  CoalSafe-Sim v2 &bull; Multimodal Time-Series Machine Learning Technical Report &bull; Generated September 2026
+</div>
+
+</body>
+</html>
