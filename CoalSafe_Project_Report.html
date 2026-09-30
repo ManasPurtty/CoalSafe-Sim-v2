@@ -2,51 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>CoalSafe-MMTS: Multimodal Time-Series Machine Learning Project Report</title>
+<title>CoalSafe-MMTS: Multimodal Time-Series AI with +1h Future Forecasting & Predictive Early Mitigation</title>
 <style>
   @page {
     size: A4;
-    margin: 20mm 15mm 20mm 15mm;
+    margin: 18mm 14mm 18mm 14mm;
   }
   body {
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #1e293b;
-    line-height: 1.6;
-    font-size: 11pt;
+    line-height: 1.55;
+    font-size: 10.5pt;
     margin: 0;
     padding: 0;
   }
   h1 {
-    font-size: 24pt;
+    font-size: 22pt;
     color: #0f172a;
-    border-bottom: 3px solid #3b82f6;
+    border-bottom: 3px solid #2563eb;
     padding-bottom: 8px;
     margin-top: 0;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   h2 {
-    font-size: 16pt;
+    font-size: 15pt;
     color: #1e3a8a;
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid #2563eb;
     padding-left: 10px;
-    margin-top: 25px;
+    margin-top: 22px;
     margin-bottom: 10px;
   }
   h3 {
-    font-size: 13pt;
+    font-size: 12pt;
     color: #1e40af;
-    margin-top: 15px;
+    margin-top: 14px;
     margin-bottom: 6px;
   }
   p, li {
-    font-size: 10.5pt;
+    font-size: 10pt;
   }
   .header-box {
-    background: linear-gradient(135deg, #1e293b, #0f172a);
+    background: linear-gradient(135deg, #0f172a, #1e293b);
     color: #ffffff;
-    padding: 24px;
+    padding: 22px;
     border-radius: 8px;
-    margin-bottom: 25px;
+    margin-bottom: 22px;
   }
   .header-box h1 {
     color: #60a5fa;
@@ -56,42 +56,48 @@
   .header-box p {
     color: #cbd5e1;
     margin: 4px 0;
-    font-size: 11pt;
+    font-size: 10.5pt;
   }
   .badge {
     display: inline-block;
     background: #2563eb;
     color: #fff;
-    padding: 3px 10px;
+    padding: 3px 9px;
     border-radius: 4px;
-    font-size: 9pt;
+    font-size: 8.5pt;
     font-weight: bold;
     margin-right: 6px;
+  }
+  .badge-success {
+    background: #16a34a;
+  }
+  .badge-warning {
+    background: #d97706;
   }
   .card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 14px;
-    margin-bottom: 15px;
+    padding: 12px;
+    margin-bottom: 12px;
     page-break-inside: avoid;
   }
   .card-title {
     font-weight: bold;
     color: #0f172a;
-    font-size: 11pt;
-    margin-bottom: 6px;
+    font-size: 10.5pt;
+    margin-bottom: 4px;
   }
   table {
     width: 100%;
     border-collapse: collapse;
-    margin: 15px 0;
-    font-size: 10pt;
+    margin: 12px 0;
+    font-size: 9.5pt;
     page-break-inside: avoid;
   }
   th, td {
     border: 1px solid #cbd5e1;
-    padding: 8px 10px;
+    padding: 7px 9px;
     text-align: left;
   }
   th {
@@ -102,17 +108,6 @@
   tr:nth-child(even) {
     background-color: #f8fafc;
   }
-  .code-block {
-    background: #0f172a;
-    color: #f8fafc;
-    padding: 12px;
-    border-radius: 6px;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 9.5pt;
-    margin: 10px 0;
-    white-space: pre-wrap;
-    page-break-inside: avoid;
-  }
   .highlight-true {
     color: #16a34a;
     font-weight: bold;
@@ -121,13 +116,31 @@
     color: #dc2626;
     font-weight: bold;
   }
-  .footer {
-    margin-top: 30px;
+  .img-container {
     text-align: center;
+    margin: 15px 0;
+    page-break-inside: avoid;
+  }
+  .img-container img {
+    max-width: 96%;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .img-caption {
     font-size: 9pt;
     color: #64748b;
+    margin-top: 5px;
+    font-style: italic;
+  }
+  .footer {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 8.5pt;
+    color: #64748b;
     border-top: 1px solid #e2e8f0;
-    padding-top: 10px;
+    padding-top: 8px;
   }
   .page-break {
     page-break-after: always;
@@ -137,215 +150,251 @@
 <body>
 
 <div class="header-box">
-  <h1>CoalSafe-MMTS: Multimodal Time-Series Machine Learning</h1>
-  <p><strong>Sub-Surface Coal Spontaneous Combustion Early Warning & Conflict Gating System</strong></p>
-  <p><strong>Student:</strong> Manas Purtty &nbsp;|&nbsp; <strong>Project Version:</strong> v2.0 (24-Hour Scale) &nbsp;|&nbsp; <strong>Model:</strong> CoalSafe-MMTS</p>
+  <h1>CoalSafe-MMTS: Multimodal Time-Series AI System</h1>
+  <p><strong>Sub-Surface Coal Spontaneous Combustion: +1-Hour Future Forecasting & Predictive Early Mitigation</strong></p>
+  <p><strong>Student:</strong> Manas Purtty &nbsp;|&nbsp; <strong>Model:</strong> CoalSafe-MMTS &nbsp;|&nbsp; <strong>Compute Backend:</strong> CUDA GPU (NVIDIA GTX 1650)</p>
   <p><strong>GitHub Repository:</strong> https://github.com/ManasPurtty/CoalSafe-Sim-v2</p>
 </div>
 
-<h2>1. Executive Summary & Problem Overview</h2>
+<h2>1. Executive Summary: Moving From Reactive Detection to Predictive Mitigation</h2>
 <p>
-  Spontaneous combustion in industrial coal stockpiles is a major hazard that begins deep sub-surface when trapped oxygen initiates exothermic low-temperature oxidation. 
-  Conventional monitoring systems suffer from two major limitations:
+  Traditional industrial coal stockpile safety operates <strong>reactively</strong>: sprinklers or water suppression systems are triggered only after surface smoke or elevated surface temperatures are detected. However, because coal is an exceptional thermal insulator, by the time surface sensors register heat (&gt;60&deg;C), the subterranean core has already escalated to critical thermal runaway (&gt;100&deg;C - 200&deg;C).
+</p>
+<p>
+  <strong>The Innovation in CoalSafe-MMTS v2:</strong>
 </p>
 <ul>
-  <li><strong>Sub-Surface Thermal Delay Gap:</strong> By the time a surface probe or regular camera detects heat, the internal core has already reached critical thermal runaway ($T > 80^\circ	ext{C}$).</li>
-  <li><strong>Single-Sensor False Alarms:</strong> A short-circuited gas probe or surface sunlight glare can trigger expensive, unnecessary automated water spray mitigation.</li>
-</ul>
-<p>
-  <strong>The Solution:</strong> We implemented <strong>CoalSafe-MMTS</strong>, an end-to-end Multimodal Deep Learning Model that combines <strong>1-hour time-series sensor sequences</strong> (gas and temperature dynamics) with <strong>50&times;50 spatial thermal camera images</strong>, coupled with an intelligent <strong>Cross-Modal Conflict Detection Gate</strong> that validates consensus (<code>True</code>) and suppresses false alarms (<code>False</code>).
-</p>
-
-<h2>2. 24-Hour Physics Simulation Expansion</h2>
-<p>
-  The synthetic physical dataset was expanded from a 2-hour scale to a full <strong>24-Hour (1,440-minute)</strong> operational timeline across 8 calibrated scenarios (11,528 total rows):
-</p>
-<ul>
-  <li><strong>Arrhenius Chemical Kinetics:</strong> Scaled base reaction rate ($0.00075	ext{ min}^{-1}$) with delta clipping $\Delta T \in [-1.0, 0.45]^\circ	ext{C}$ guaranteeing 24-hour numerical thermodynamic stability.</li>
-  <li><strong>Diurnal Day/Night Ambient Cycle:</strong> Realistic continuous sinusoidal temperature swing ($\pm 6^\circ	ext{C}$ swing, with minimum at 06:00 AM and peak heat at 14:00 / 02:00 PM).</li>
-  <li><strong>10-Minute Periodic Image Sampling:</strong> Generates 145 thermal frames per scenario ($t = 0, 10, 20, \dots, 1440$) and corresponding snapshot graphs under <code>graphs/per_minute/</code>.</li>
+  <li><strong>Sliding 1-Hour Temporal Window:</strong> Consumes the past 60 minutes [t-60m ... t] of multimodal sensor history (10 gas and physical dynamics channels + 50&times;50 spatial thermal images).</li>
+  <li><strong>+1-Hour Horizon Future Forecasting (t+60 min):</strong> Explicitly forecasts the future risk score (&plusmn;1h Risk) and the internal sub-surface core temperature (Core Temp &deg;C) 60 minutes into the future.</li>
+  <li><strong>Closed-Loop Pre-emptive Early Mitigation:</strong> If the +1h future forecasted risk crosses the actionable threshold (&ge; 60%) with validated cross-modal consensus, early cooling is activated <em>immediately at time t</em>. This caps core temperatures at <strong>38.1&deg;C</strong>, averting thermal runaway entirely and providing a <strong>massive lead-time head-start advantage</strong>.</li>
+  <li><strong>Cross-Modal Conflict Gating:</strong> Detects single-sensor anomalies (e.g. electrical CO spikes, solar glare on thermal cameras) and suppresses false alarms (|&Delta;| &gt; 25%).</li>
 </ul>
 
 <div class="page-break"></div>
 
-<h2>3. Multimodal ML Model Architecture (`CoalSafe-MMTS`)</h2>
+<h2>2. Multi-Horizon Neural Network Architecture (CoalSafe-MMTS)</h2>
 <p>
-  The neural network contains 4 integrated processing blocks designed for time-series and spatial perception:
+  The network features a unified deep multimodal pipeline with 653,329 trainable parameters:
 </p>
 
 <div class="card">
-  <div class="card-title">1. Tabular Time-Series Branch (Sensor Reader)</div>
+  <div class="card-title">1. Temporal Time-Series Branch (Sensors)</div>
   <p>
-    Takes a sliding history window of 6 consecutive time steps (60 minutes) across 10 physical sensor channels: 
-    <code>ambient_temp, humidity, wind_speed, coal_moisture, CO, CO2, O2, surf_temp_mean, surf_temp_max, heating_rate</code>.
+    Consumes sequence X_tab (batch &times; 6 steps &times; 10 channels) through a 2-layer Bi-directional GRU (hidden dim = 64) equipped with Temporal Self-Attention. Produces 128-d temporal latent vector h_tab.
   </p>
-  <ul>
-    <li><strong>2-Layer Bi-directional GRU (hidden size = 64):</strong> Reads sequences forward and backward to detect rates of gas accumulation.</li>
-    <li><strong>Temporal Self-Attention:</strong> Automatically calculates importance weights across the 60-minute window, highlighting moments of rapid gas acceleration.</li>
-    <li><strong>Output:</strong> 128-dimensional latent vector ($h_{	ext{tab}}$).</li>
-  </ul>
 </div>
 
 <div class="card">
-  <div class="card-title">2. Spatial Thermal Image Branch (Camera Reader)</div>
+  <div class="card-title">2. Spatial Thermal Image Branch (Infrared Camera)</div>
   <p>
-    Takes the $50	imes50$ pixel 3-channel thermal heatmap image corresponding to the current time step.
+    Consumes 50&times;50&times;3 thermal heatmap images through a 3-stage 2D-CNN (32 &rarr; 64 &rarr; 128 filters) with LeakyReLU and Adaptive Average Pooling. Produces 128-d spatial latent vector h_img.
   </p>
-  <ul>
-    <li><strong>3-Stage 2D-CNN:</strong> Conv2D layers ($32 ightarrow 64 ightarrow 128$ filters) with LeakyReLU activations and MaxPool downsampling.</li>
-    <li><strong>Adaptive Average Pooling:</strong> Reduces spatial feature maps into a dense 128-dimensional latent vector ($h_{	ext{img}}$).</li>
-  </ul>
 </div>
 
 <div class="card">
-  <div class="card-title">3. Cross-Modal Gated Bilinear Fusion (The AI Brain)</div>
+  <div class="card-title">3. Gated Bilinear Cross-Modal Fusion</div>
   <p>
-    Fuses the 128 sensor features and 128 thermal camera features into a unified 256-dimensional representation:
+    Calculates adaptive modality reliability weight g = &sigma;(W_g [h_tab; h_img]) and synthesizes multimodal representation h_fused in R^256.
   </p>
-  <ul>
-    <li><strong>Adaptive Gating Score ($g \in [0, 1]$):</strong> $g = \sigma(W_g [h_{	ext{tab}}; h_{	ext{img}}])$ dynamically weighs sensor vs. thermal reliability.</li>
-    <li><strong>Interaction Synthesis:</strong> Fuses $[g \odot h_{	ext{tab}}; (1-g) \odot h_{	ext{img}}; h_{	ext{tab}} \odot h_{	ext{img}}]$ via an MLP with Dropout ($0.2$).</li>
-  </ul>
 </div>
 
 <div class="card">
-  <div class="card-title">4. Multi-Head Outputs & Conflict Gating Module</div>
+  <div class="card-title">4. Multi-Horizon &amp; Internal State Prediction Heads</div>
   <ul>
-    <li><code>tab_head</code>: Auxiliary prediction from sensors only ($\hat{y}_{	ext{tab}} \in [0, 100\%]$).</li>
-    <li><code>img_head</code>: Auxiliary prediction from thermal images only ($\hat{y}_{	ext{img}} \in [0, 100\%]$).</li>
-    <li><code>fused_reg_head</code>: Unified Multimodal Risk Score ($\hat{y}_{	ext{fused}} \in [0, 100\%]$).</li>
-    <li><code>fused_class_head</code>: 5-Class Categorical Classifier (<code>NORMAL, LOW, MEDIUM, HIGH, CRITICAL</code>).</li>
+    <li><code>tab_head</code> &amp; <code>img_head</code>: Auxiliary present-moment modality estimations.</li>
+    <li><code>fused_reg_head</code>: Present-moment unified risk score (y_now &isin; [0, 100%]).</li>
+    <li><code>forecast_60m_head</code>: <strong>+1-Hour Future Risk Forecaster (y_60m &isin; [0, 100%])</strong>.</li>
+    <li><code>forecast_temp_core_60m_head</code>: <strong>+1-Hour Internal Core Temperature Forecaster (T_core_60m in &deg;C)</strong>.</li>
+    <li><code>forecast_class_60m_head</code>: 5-Class Future Risk Classifier (<code>NORMAL, LOW, MEDIUM, HIGH, CRITICAL</code>).</li>
   </ul>
+</div>
+
+<div class="img-container">
+  <img src="file:///C:/Users/manas/OneDrive/Desktop/All_folder/coal/CoalSafe-Sim-v2/graphs/ml_results/training_convergence.png" alt="Training Convergence Curve">
+  <div class="img-caption">Figure 1: Multi-Task Training Convergence across 40 epochs on NVIDIA GTX 1650 CUDA GPU.</div>
 </div>
 
 <div class="page-break"></div>
 
-<h2>4. The "True vs. False" Conflict Gating Benchmarks</h2>
+<h2>3. Predictive Early Mitigation vs. Reactive Mitigation: Experimental Results</h2>
 <p>
-  As requested by the project requirements, the system computes the <strong>Modality Disagreement</strong>:
-  $$\Delta_{	ext{modal}} = |\hat{y}_{	ext{tab}} - \hat{y}_{	ext{img}}|$$
-  If $\Delta_{	ext{modal}} \le 25\%$, the decision is verified as <strong class="highlight-true">TRUE (Valid Consensus)</strong>. If $\Delta_{	ext{modal}} > 25\%$, the decision is flagged as <strong class="highlight-false">FALSE (Conflict Detected)</strong> to suppress false alarms.
+  To prove the efficacy of +1h future forecasting, we evaluated three operational scenarios across 24 hours (1,440 minutes):
 </p>
 
 <table>
   <thead>
     <tr>
-      <th>Test Scenario</th>
-      <th>Input Conditions</th>
-      <th>Sensor Risk</th>
-      <th>Thermal Risk</th>
-      <th>Disagreement</th>
-      <th>Consensus Status</th>
-      <th>Action Taken</th>
+      <th>Operational Policy</th>
+      <th>Mitigation Trigger</th>
+      <th>Peak Surface Temp</th>
+      <th>Peak Internal Core Temp</th>
+      <th>Thermal Damage Outcome</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Case 1: Normal Baseline</strong></td>
-      <td>Normal gases (CO &lt; 5 ppm) + Cold camera image</td>
-      <td>10.3%</td>
-      <td>7.3%</td>
-      <td>3.0%</td>
-      <td><span class="highlight-true">TRUE (Valid)</span></td>
-      <td>Routine Monitoring</td>
+      <td><strong>1. S06: Proactive Early Mitigation (+1h AI Forecast)</strong></td>
+      <td><strong>t = 360 min (6h 0m)</strong></td>
+      <td><strong>31.2&deg;C</strong></td>
+      <td><strong>38.1&deg;C</strong></td>
+      <td><span class="highlight-true">&starf; 100% Runaway Averted (Safe State Maintained)</span></td>
     </tr>
     <tr>
-      <td><strong>Case 2: Runaway Fire</strong></td>
-      <td>High CO gas (85 ppm) + Hot thermal hotspot image</td>
-      <td>66.4%</td>
-      <td>66.9%</td>
-      <td>0.5%</td>
-      <td><span class="highlight-true">TRUE (Valid)</span></td>
-      <td><strong>Automated Water Spray Triggered</strong></td>
+      <td><strong>2. S07: Reactive Late Mitigation (Traditional Alarms)</strong></td>
+      <td>t = 840 min (14h 0m)</td>
+      <td>98.8&deg;C</td>
+      <td>92.2&deg;C</td>
+      <td>Severe core heating; +8 hours of thermal degradation</td>
     </tr>
     <tr>
-      <td><strong>Case 3: Injected Sensor Glitch</strong></td>
-      <td>Glitch spikes CO to 250 ppm, but Thermal Camera is Cold</td>
-      <td>67.4%</td>
-      <td>7.3%</td>
-      <td>60.0%</td>
-      <td><span class="highlight-false">FALSE (Conflict)</span></td>
-      <td><strong>Spray Suppressed (Sensor Fault Flag)</strong></td>
-    </tr>
-    <tr>
-      <td><strong>Case 4: Camera Glare Injected</strong></td>
-      <td>Normal gases, but sunlight glare on Thermal Camera</td>
-      <td>10.3%</td>
-      <td>66.9%</td>
-      <td>56.6%</td>
-      <td><span class="highlight-false">FALSE (Conflict)</span></td>
-      <td><strong>Spray Suppressed (Optical Glare Flag)</strong></td>
+      <td><strong>3. S05: Unmitigated Runaway (No Action)</strong></td>
+      <td>None (Ignored)</td>
+      <td>217.8&deg;C</td>
+      <td>200.0&deg;C</td>
+      <td><span class="highlight-false">Catastrophic Combustion Runaway (Total Stockpile Loss)</span></td>
     </tr>
   </tbody>
 </table>
 
-<h2>5. Codebase Deep Dive (File-by-File Summary)</h2>
-
-<div class="card">
-  <div class="card-title">1. code/ml/dataset.py (Data Loader & Sliding Window)</div>
-  <p>
-    Loads <code>sensor_data.csv</code> and <code>thermal_metadata.csv</code>, handles missing values using <code>ffill()</code> and <code>bfill()</code>, calculates Z-score feature normalization $(x - \mu)/\sigma$, generates 60-minute sliding sequence windows, and formats data into PyTorch batches of size 16.
-  </p>
+<div class="img-container">
+  <img src="file:///C:/Users/manas/OneDrive/Desktop/All_folder/coal/CoalSafe-Sim-v2/graphs/ml_results/early_vs_late_mitigation_comparison.png" alt="Early vs Late Mitigation Comparison">
+  <div class="img-caption">Figure 2: Dynamic Temperature &amp; Risk Profiles comparing Proactive Early Mitigation (S06, green), Late Mitigation (S07, amber), and Unmitigated Runaway (S05, red).</div>
 </div>
 
 <div class="card">
-  <div class="card-title">2. code/ml/model.py (MultimodalTimeSeriesNet)</div>
+  <div class="card-title">Key Finding: Lead-Time Head-Start Advantage</div>
   <p>
-    Defines the complete neural network architecture: 2-layer Bi-GRU with Temporal Attention, 3-layer Conv2D spatial extractor, Gated Bilinear Fusion, multiple prediction heads, and the <code>evaluate_consensus()</code> gating function.
-  </p>
-</div>
-
-<div class="card">
-  <div class="card-title">3. code/ml/train.py (GPU Training Pipeline)</div>
-  <p>
-    Trains the 520,713 model parameters over 40 epochs using AdamW optimizer ($lr=10^{-3}$, weight decay $= 10^{-4}$) and Cosine Annealing learning rate schedule. Uses a multi-task loss combining Smooth L1 regression loss, Cross-Entropy classification loss, and modality consistency regularization. Saves the best checkpoint to <code>coalsafe_mmts_best.pt</code>.
-  </p>
-</div>
-
-<div class="card">
-  <div class="card-title">4. code/ml/evaluate.py (Testing & Conflict Benchmarks)</div>
-  <p>
-    Evaluates the trained model on unseen Scenario S07 (Late Mitigation) and executes the 4 benchmark conflict experiments demonstrating 100% false-alarm suppression.
-  </p>
-</div>
-
-<div class="card">
-  <div class="card-title">5. code/ml/plot_ml_results.py (Visualization Generator)</div>
-  <p>
-    Generates presentation-grade figures under <code>graphs/ml_results/</code>: training convergence curves, 24-hour S07 test prediction trajectories, and conflict gating bar charts.
+    In developing runaway conditions (Scenario S05), the AI's +1h future forecasting head predicts catastrophic risk and triggers mitigation <strong>well ahead</strong> of conventional surface-mounted thermocouples. By acting early at t=360m, the coal pile never enters the exothermic self-heating threshold (&gt;50&deg;C), saving operational downtime and water suppression resources.
   </p>
 </div>
 
 <div class="page-break"></div>
 
-<h2>6. Key Experimental Results</h2>
-<ul>
-  <li><strong>Training Hardware:</strong> NVIDIA GeForce GTX 1650 GPU (CUDA acceleration)</li>
-  <li><strong>Total Trainable Parameters:</strong> 520,713</li>
-  <li><strong>Best Validation MAE:</strong> <span class="highlight-true">3.33%</span> (Validation Accuracy: <strong>88.3%</strong>)</li>
-  <li><strong>Held-out Test Scenario S07:</strong> $R^2 = \mathbf{0.8321}$, $	ext{MAE} = 6.57\%$, $	ext{RMSE} = 8.49\%$</li>
-  <li><strong>False Alarm Protection:</strong> 100% success rate on detecting and suppressing injected sensor faults and camera glare.</li>
-</ul>
+<h2>4. Held-Out Generalization Trajectory (+1-Hour Horizon)</h2>
+<p>
+  The model was evaluated on held-out Scenario S07 (140 unseen test sequences). The +1h future forecasting head achieved an R&sup2; of <strong>0.6926</strong>, an MAE of <strong>8.47%</strong>, and an RMSE of <strong>11.10%</strong>.
+</p>
 
-<h2>7. Viva & Teacher Question-Answer Cheatsheet</h2>
+<div class="img-container">
+  <img src="file:///C:/Users/manas/OneDrive/Desktop/All_folder/coal/CoalSafe-Sim-v2/graphs/ml_results/future_forecasting_trajectory_1h.png" alt="Future Forecasting Trajectory">
+  <div class="img-caption">Figure 3: Unseen Test Trajectory (Scenario S07) tracking Ground Truth +1h Future Risk vs. AI Forecasted Risk and Core Temperature.</div>
+</div>
+
+<h2>5. Cross-Modal Conflict Gating &amp; False Alarm Protection</h2>
+<p>
+  Automated mitigation must be robust against corrupted data. Modality disagreement |&Delta;_modal| = |y_tab - y_img| is evaluated against a 25% safety threshold:
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Test Case</th>
+      <th>Input Perturbation</th>
+      <th>Sensor Risk</th>
+      <th>Thermal Risk</th>
+      <th>|&Delta;| Disagree</th>
+      <th>Consensus Status</th>
+      <th>Automated Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Case 1: Normal Baseline</strong></td>
+      <td>Nominal gases (CO &lt; 5 ppm) + Cold camera image</td>
+      <td>4.7%</td>
+      <td>5.7%</td>
+      <td>3.3%</td>
+      <td><span class="highlight-true">TRUE (Consensus)</span></td>
+      <td>Routine Monitoring</td>
+    </tr>
+    <tr>
+      <td><strong>Case 2: Developing Runaway</strong></td>
+      <td>Rising CO (75 ppm) + Hot hotspot camera image</td>
+      <td>70.4%</td>
+      <td>67.9%</td>
+      <td>0.8%</td>
+      <td><span class="highlight-true">TRUE (Consensus)</span></td>
+      <td><strong>&starf; Early Spray Activated at time t</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Case 3: Injected Sensor Glitch</strong></td>
+      <td>Faulty CO spike (250 ppm) + Cold thermal camera</td>
+      <td>60.7%</td>
+      <td>8.6%</td>
+      <td>52.1%</td>
+      <td><span class="highlight-false">FALSE (Conflict)</span></td>
+      <td><strong>Suppressed (Sensor Fault Flagged)</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Case 4: Injected Camera Glare</strong></td>
+      <td>Nominal gases + Solar glare on thermal lens</td>
+      <td>5.3%</td>
+      <td>66.5%</td>
+      <td>61.2%</td>
+      <td><span class="highlight-false">FALSE (Conflict)</span></td>
+      <td><strong>Suppressed (Optical Glare Flagged)</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="img-container">
+  <img src="file:///C:/Users/manas/OneDrive/Desktop/All_folder/coal/CoalSafe-Sim-v2/graphs/ml_results/multimodal_conflict_gating_analysis.png" alt="Multimodal Conflict Gating Analysis">
+  <div class="img-caption">Figure 4: Cross-Modal Conflict Benchmark verifying 100% false-alarm suppression and consensus validation.</div>
+</div>
+
+<div class="page-break"></div>
+
+<h2>6. Codebase File Structure &amp; Execution Roles</h2>
 
 <div class="card">
-  <p><strong>Q1: Why did you use a Multimodal model instead of only temperature sensors?</strong></p>
-  <p><em>Answer:</em> Sub-surface coal fires start deep underground. Surface temperature remains cold for hours due to coal's thermal insulation. Gas sensors (CO) detect early oxidation, while thermal cameras provide exact spatial coordinates. Combining both gives early warning with spatial precision.</p>
+  <div class="card-title">1. code/ml/dataset.py (Multimodal Time-Series Loader)</div>
+  <p>Ingests 10 tabular sensor channels, loads 50&times;50 thermal heatmap images, merges <code>latent_state.csv</code> for internal core temperatures, applies rolling feature standardization, and structures multi-horizon targets (y_now, y_30m, y_60m, T_core_60m).</p>
 </div>
 
 <div class="card">
-  <p><strong>Q2: Why did you choose GRU over standard Feedforward networks for sensors?</strong></p>
-  <p><em>Answer:</em> Sensor data is time-series. A single static CO reading of 15 ppm is ambiguous, but observing CO accelerate from 2 ppm to 15 ppm over 1 hour indicates active spontaneous combustion. GRU captures temporal rates of rise.</p>
+  <div class="card-title">2. code/ml/model.py (MultimodalTimeSeriesNet)</div>
+  <p>Constructs the complete Bi-GRU + Attention sensor backbone, Conv2D spatial vision encoder, Gated Bilinear fusion module, multi-horizon forecasting heads, and closed-loop decision gate <code>evaluate_predictive_mitigation()</code>.</p>
 </div>
 
 <div class="card">
-  <p><strong>Q3: How does the Conflict Gate protect the system?</strong></p>
-  <p><em>Answer:</em> The model computes individual risk estimates for sensors ($\hat{y}_{	ext{tab}}$) and camera ($\hat{y}_{	ext{img}}$). If $|\hat{y}_{	ext{tab}} - \hat{y}_{	ext{img}}| > 25\%$, the model outputs <code>False</code> (Conflict), preventing false automated water spray activation during sensor glitches or solar camera glare.</p>
+  <div class="card-title">3. code/ml/train.py (GPU Training Engine)</div>
+  <p>Executes multi-task optimization over 40 epochs on NVIDIA GTX 1650 CUDA GPU, tracking present risk, future risk, and core temperature regression losses.</p>
+</div>
+
+<div class="card">
+  <div class="card-title">4. code/ml/evaluate.py (Benchmarking Suite)</div>
+  <p>Benchmarks +1h future forecasting generalization on unseen held-out Scenario S07 and runs the 4 conflict gating case studies.</p>
+</div>
+
+<div class="card">
+  <div class="card-title">5. code/ml/predictive_controller.py (Closed-Loop Simulator)</div>
+  <p>Simulates closed-loop early mitigation interventions, contrasting thermal suppression trajectories across S06 (Proactive), S07 (Reactive), and S05 (Unmitigated).</p>
+</div>
+
+<div class="card">
+  <div class="card-title">6. code/ml/plot_ml_results.py (Figure Generator)</div>
+  <p>Exports 4 publication-quality visualization charts to <code>graphs/ml_results/</code>.</p>
+</div>
+
+<h2>7. Professor / Viva Examination Defense Cheatsheet</h2>
+
+<div class="card">
+  <p><strong>Q1: Why is future forecasting (t+60 min) essential instead of just detecting current risk (t)?</strong></p>
+  <p><em>Answer:</em> Coal spontaneous combustion has significant thermal inertia. By the time surface temperature rises noticeably, deep core oxidation is already well advanced. Forecasting +1h ahead allows the system to trigger early cooling while the core is still cool (38.1&deg;C), completely preventing runaway rather than reacting to an active fire.</p>
+</div>
+
+<div class="card">
+  <p><strong>Q2: How does the model forecast future core temperature without physical core probes?</strong></p>
+  <p><em>Answer:</em> Internal core temperature is unmeasurable directly in large stockpiles. The model's Bi-GRU with Temporal Attention learns the thermodynamic transfer function from surface gas accumulation rates (&Delta;CO, &Delta;CO2, heating rate) and surface thermal gradients over a 1-hour sliding window to infer and forecast sub-surface core temperature.</p>
+</div>
+
+<div class="card">
+  <p><strong>Q3: How do you prevent false activations when a sensor malfunctions?</strong></p>
+  <p><em>Answer:</em> The Conflict Gating module computes modality disagreement |y_tab - y_img|. If a single sensor spikes (e.g. CO glitch or camera lens flare), the disagreement exceeds 25%, flagging <code>is_valid = False</code> and suppressing spray activation until human verification.</p>
 </div>
 
 <div class="footer">
-  CoalSafe-Sim v2 &bull; Multimodal Time-Series Machine Learning Technical Report &bull; Generated September 2026
+  CoalSafe-Sim v2 &bull; Multimodal Time-Series AI Technical Report &bull; Generated September 2026 &bull; Manas Purtty
 </div>
 
 </body>

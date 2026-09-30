@@ -1,44 +1,39 @@
 {
   "test_scenario": "S07 (Late Mitigation - Held-out Unseen)",
-  "metrics": {
-    "mean_absolute_error_percent": 6.57,
-    "root_mean_squared_error_percent": 8.49,
-    "r2_score": 0.8321,
-    "accuracy_percent": 70.0,
-    "weighted_f1_percent": 72.4
+  "forecast_horizon": "+1 Hour (60 minutes)",
+  "future_forecast_metrics": {
+    "future_mae_percent": 8.47,
+    "future_rmse_percent": 11.1,
+    "future_r2_score": 0.6926,
+    "future_accuracy_percent": 65.0,
+    "future_f1_percent": 67.2
   },
-  "conflict_benchmarks": {
+  "benchmarks": {
     "case_1_normal_consensus": {
-      "tabular_risk_percent": 10.3,
-      "thermal_risk_percent": 7.3,
-      "fused_risk_percent": 12.1,
-      "disagreement_percent": 3.0,
-      "consensus_status": "TRUE",
-      "action": "Routine Monitoring (No Alarm)"
+      "present_risk_percent": 4.7,
+      "forecast_risk_60m_percent": 5.7,
+      "forecast_temp_core_60m": 30.0,
+      "disagreement_percent": 3.3,
+      "status": "ROUTINE_MONITORING",
+      "action": "Routine Monitoring (Predicted +1h Risk: 5.7%, Safe State)"
     },
-    "case_2_runaway_consensus": {
-      "tabular_risk_percent": 66.4,
-      "thermal_risk_percent": 66.9,
-      "fused_risk_percent": 65.7,
-      "disagreement_percent": 0.5,
-      "consensus_status": "TRUE",
-      "action": "Automated Mitigation Spray Triggered"
+    "case_2_predictive_early_mitigation": {
+      "present_risk_percent": 70.4,
+      "forecast_risk_60m_percent": 67.9,
+      "forecast_temp_core_60m": 207.8,
+      "disagreement_percent": 0.8,
+      "status": "PREDICTIVE_MITIGATION_TRIGGERED",
+      "action": "Early Automated Water/Foam Spray Activated at time t (Predicted +1h Risk: 67.9%, Core Temp: 207.8\u00b0C)"
     },
     "case_3_injected_sensor_glitch": {
-      "tabular_risk_percent": 67.4,
-      "thermal_risk_percent": 7.3,
-      "fused_risk_percent": 63.8,
-      "disagreement_percent": 60.0,
-      "consensus_status": "FALSE",
-      "action": "SUPPRESS SPRAY (Sensor Fault Diagnosed)"
+      "disagreement_percent": 52.1,
+      "status": "CONFLICT_SUPPRESSED",
+      "action": "Mitigation Suppressed (Cross-Modal Disagreement / Sensor Glitch Detected)"
     },
     "case_4_injected_camera_glare": {
-      "tabular_risk_percent": 10.3,
-      "thermal_risk_percent": 66.9,
-      "fused_risk_percent": 11.6,
-      "disagreement_percent": 56.6,
-      "consensus_status": "FALSE",
-      "action": "SUPPRESS SPRAY (Camera Artifact Diagnosed)"
+      "disagreement_percent": 61.2,
+      "status": "CONFLICT_SUPPRESSED",
+      "action": "Mitigation Suppressed (Cross-Modal Disagreement / Sensor Glitch Detected)"
     }
   }
 }

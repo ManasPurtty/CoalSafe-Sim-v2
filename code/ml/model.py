@@ -122,15 +122,16 @@ class CrossModalGatedFusion(nn.Module):
 
 class MultimodalTimeSeriesNet(nn.Module):
     """
-    CoalSafe-MMTS: Multimodal Time-Series Neural Network.
+    CoalSafe-MMTS Forecaster: Multimodal Time-Series Neural Network with +1h Future Forecasting.
     
     Features:
-      - Tabular Temporal Encoder (GRU + Attention)
-      - Thermal Spatial Encoder (2D-CNN)
-      - Gated Cross-Modal Fusion
-      - Auxiliary Individual Modality Heads (Tabular Head, Thermal Head)
-      - Joint Consensus Risk Regression Head & 5-Class Classification Head
-      - Cross-Modal Conflict & Anomaly Detection Gate
+      - Tabular Temporal Sequence Encoder (Bi-GRU + Attention)
+      - Thermal Spatial Feature Extractor (2D-CNN)
+      - Cross-Modal Gated Bilinear Fusion
+      - Present Risk Regression & Classification Heads (t=now)
+      - Multi-Horizon Future Risk Forecaster (+30m, +60m / +1 Hour Ahead)
+      - Future Internal Core Temperature Forecaster (+1 Hour Ahead)
+      - Cross-Modal Conflict & Predictive Early Mitigation Controller Gate
     """
     def __init__(self, num_tab_features=10, num_classes=5, conflict_threshold=25.0):
         super().__init__()
@@ -155,7 +156,7 @@ class MultimodalTimeSeriesNet(nn.Module):
             nn.Sigmoid(),
         )
 
-        # Joint Multimodal Heads
+        # Present Joint Multimodal Heads (t = now)
         self.fused_reg_head = nn.Sequential(
             nn.Linear(256, 128),
             nn.LeakyReLU(0.1),
@@ -164,6 +165,38 @@ class MultimodalTimeSeriesNet(nn.Module):
             nn.Sigmoid(),
         )
         self.fused_class_head = nn.Sequential(
+            nn.Linear(256, 128),
+            nn.LeakyReLU(0.1),
+            nn.Dropout(0.2),
+            nn.Linear(128, num_classes),
+        )
+
+        # Multi-Horizon Future Forecasting Heads (+30m and +60m / +1 Hour Ahead)
+        self.forecast_30m_head = nn.Sequential(
+            nn.Linear(256, 128),
+            nn.LeakyReLU(0.1),
+            nn.Dropout(0.2),
+            nn.Linear(128, 1),
+            nn.Sigmoid(),
+        )
+        self.forecast_60m_head = nn.Sequential(
+            nn.Linear(256, 128),
+            nn.LeakyReLU(0.1),
+            nn.Dropout(0.2),
+            nn.Linear(128, 1),
+            nn.Sigmoid(),
+        )
+
+        # Future Internal Core Temperature Forecaster (in °C, scaled 20-220°C)
+        self.forecast_temp_core_60m_head = nn.Sequential(
+            nn.Linear(256, 128),
+            nn.LeakyReLU(0.1),
+            nn.Dropout(0.2),
+            nn.Linear(128, 1),
+        )
+
+        # Future 60m Categorical Classification Head
+        self.forecast_class_60m_head = nn.Sequential(
             nn.Linear(256, 128),
             nn.LeakyReLU(0.1),
             nn.Dropout(0.2),
@@ -186,15 +219,29 @@ class MultimodalTimeSeriesNet(nn.Module):
         # Joint Cross-Modal Fusion
         h_fused, gate_scores = self.fusion(h_tab, h_img)
 
-        # Joint Predictions
-        pred_fused_risk = self.fused_reg_head(h_fused) * 100.0
-        class_logits = self.fused_class_head(h_fused)
+        # Present Predictions (t = now)
+        pred_fused_risk_now = self.fused_reg_head(h_fused) * 100.0
+        class_logits_now = self.fused_class_head(h_fused)
+
+        # Future Multi-Horizon Forecasts (+30m, +60m / +1 Hour Ahead)
+        pred_risk_30m = self.forecast_30m_head(h_fused) * 100.0
+        pred_risk_60m = self.forecast_60m_head(h_fused) * 100.0 # +1h Future Horizon!
+
+        # Future Internal Core Temperature (+1h)
+        # Scaled around baseline 30°C
+        pred_temp_core_60m = 30.0 + F.relu(self.forecast_temp_core_60m_head(h_fused) * 40.0)
+
+        class_logits_60m = self.forecast_class_60m_head(h_fused)
 
         return {
-            "fused_risk": pred_fused_risk.squeeze(-1),
-            "tab_risk": pred_tab_risk.squeeze(-1),
-            "img_risk": pred_img_risk.squeeze(-1),
-            "class_logits": class_logits,
+            "fused_risk_now": pred_fused_risk_now.squeeze(-1),
+            "tab_risk_now": pred_tab_risk.squeeze(-1),
+            "img_risk_now": pred_img_risk.squeeze(-1),
+            "class_logits_now": class_logits_now,
+            "risk_forecast_30m": pred_risk_30m.squeeze(-1),
+            "risk_forecast_60m": pred_risk_60m.squeeze(-1), # Key +1h Forecast
+            "temp_core_forecast_60m": pred_temp_core_60m.squeeze(-1),
+            "class_logits_60m": class_logits_60m,
             "gate_scores": gate_scores,
             "tab_attn": tab_attn,
         }
@@ -202,14 +249,11 @@ class MultimodalTimeSeriesNet(nn.Module):
     def evaluate_consensus(self, out_dict):
         """
         Evaluates cross-modal agreement and flags conflicts.
-        Returns:
-          - is_valid: Boolean mask (True = Consensus Valid, False = Conflict Detected)
-          - disagreement: Absolute difference between tabular and thermal predictions
-          - conflict_status: Explanatory string
         """
-        tab_r = out_dict["tab_risk"]
-        img_r = out_dict["img_risk"]
-        fused_r = out_dict["fused_risk"]
+        tab_r = out_dict["tab_risk_now"]
+        img_r = out_dict["img_risk_now"]
+        fused_now = out_dict["fused_risk_now"]
+        fused_60m = out_dict["risk_forecast_60m"]
 
         disagreement = torch.abs(tab_r - img_r)
         is_valid = disagreement <= self.conflict_threshold
@@ -217,7 +261,48 @@ class MultimodalTimeSeriesNet(nn.Module):
         return {
             "is_valid": is_valid,
             "disagreement": disagreement,
-            "fused_risk": fused_r,
-            "tab_risk": tab_r,
-            "img_risk": img_r,
+            "fused_risk_now": fused_now,
+            "risk_forecast_60m": fused_60m,
+            "temp_core_forecast_60m": out_dict["temp_core_forecast_60m"],
+            "tab_risk_now": tab_r,
+            "img_risk_now": img_r,
+        }
+
+    def evaluate_predictive_mitigation(self, out_dict, trigger_threshold=60.0):
+        """
+        Predictive Closed-Loop Mitigation Controller Gate.
+        
+        Logic:
+          IF future forecasted risk at t+60m >= 60.0% (HIGH RISK) AND consensus is TRUE:
+            --> Trigger PREVENTIVE EARLY MITIGATION NOW at time t!
+            --> Lead time advantage: ~60 minutes before thermal runaway breakout.
+        """
+        consensus = self.evaluate_consensus(out_dict)
+        is_valid = consensus["is_valid"]
+        fused_now = consensus["fused_risk_now"]
+        fused_60m = consensus["risk_forecast_60m"]
+        temp_60m = consensus["temp_core_forecast_60m"]
+
+        # Trigger early mitigation if future risk in 1h is projected to become HIGH/CRITICAL
+        will_be_dangerous = fused_60m >= trigger_threshold
+        trigger_early_mitigation = bool((will_be_dangerous and is_valid).item() if torch.is_tensor(is_valid) else (will_be_dangerous and is_valid))
+
+        if trigger_early_mitigation:
+            status = "PREDICTIVE_MITIGATION_TRIGGERED"
+            action = f"Early Automated Water/Foam Spray Activated at time t (Predicted +1h Risk: {fused_60m.item():.1f}%, Core Temp: {temp_60m.item():.1f}°C)"
+        elif not is_valid:
+            status = "CONFLICT_SUPPRESSED"
+            action = "Mitigation Suppressed (Cross-Modal Disagreement / Sensor Glitch Detected)"
+        else:
+            status = "ROUTINE_MONITORING"
+            action = f"Routine Monitoring (Predicted +1h Risk: {fused_60m.item():.1f}%, Safe State)"
+
+        return {
+            "trigger_early_mitigation": trigger_early_mitigation,
+            "status": status,
+            "action": action,
+            "risk_now": fused_now,
+            "risk_forecast_60m": fused_60m,
+            "temp_core_forecast_60m": temp_60m,
+            "is_valid": is_valid,
         }
