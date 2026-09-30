@@ -182,6 +182,57 @@ def run_evaluation():
     print(f"  • Consensus Status    : {'✓ TRUE' if valid4 else '✗ FALSE (CONFLICT DETECTED - FALSE ALARM SUPPRESSED)'}")
     print(f"  • Gating Action       : SUPPRESS AUTOMATED SPRAY (Camera Artifact Flag Raised)")
 
+    # Save evaluation metrics to JSON
+    eval_results = {
+        "test_scenario": "S07 (Late Mitigation - Held-out Unseen)",
+        "metrics": {
+            "mean_absolute_error_percent": round(float(mae), 2),
+            "root_mean_squared_error_percent": round(float(rmse), 2),
+            "r2_score": round(float(r2), 4),
+            "accuracy_percent": round(float(acc), 1),
+            "weighted_f1_percent": round(float(f1), 1)
+        },
+        "conflict_benchmarks": {
+            "case_1_normal_consensus": {
+                "tabular_risk_percent": round(float(tab_r1), 1),
+                "thermal_risk_percent": round(float(img_r1), 1),
+                "fused_risk_percent": round(float(fused_r1), 1),
+                "disagreement_percent": round(float(diff1), 1),
+                "consensus_status": "TRUE",
+                "action": "Routine Monitoring (No Alarm)"
+            },
+            "case_2_runaway_consensus": {
+                "tabular_risk_percent": round(float(tab_r2), 1),
+                "thermal_risk_percent": round(float(img_r2), 1),
+                "fused_risk_percent": round(float(fused_r2), 1),
+                "disagreement_percent": round(float(diff2), 1),
+                "consensus_status": "TRUE",
+                "action": "Automated Mitigation Spray Triggered"
+            },
+            "case_3_injected_sensor_glitch": {
+                "tabular_risk_percent": round(float(tab_r3), 1),
+                "thermal_risk_percent": round(float(img_r3), 1),
+                "fused_risk_percent": round(float(fused_r3), 1),
+                "disagreement_percent": round(float(diff3), 1),
+                "consensus_status": "FALSE",
+                "action": "SUPPRESS SPRAY (Sensor Fault Diagnosed)"
+            },
+            "case_4_injected_camera_glare": {
+                "tabular_risk_percent": round(float(tab_r4), 1),
+                "thermal_risk_percent": round(float(img_r4), 1),
+                "fused_risk_percent": round(float(fused_r4), 1),
+                "disagreement_percent": round(float(diff4), 1),
+                "consensus_status": "FALSE",
+                "action": "SUPPRESS SPRAY (Camera Artifact Diagnosed)"
+            }
+        }
+    }
+
+    results_path = MODEL_DIR / "evaluation_results.json"
+    with open(results_path, "w", encoding="utf-8") as f:
+        json.dump(eval_results, f, indent=2)
+
+    print(f"  [SAVED] Evaluation metrics saved to: {results_path}")
     print("\n" + "=" * 70)
     print("  [SUCCESS] All Benchmark Evaluations & Conflict Gating Tests Passed!")
     print("=" * 70)

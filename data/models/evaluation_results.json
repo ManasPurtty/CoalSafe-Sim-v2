@@ -1,0 +1,44 @@
+{
+  "test_scenario": "S07 (Late Mitigation - Held-out Unseen)",
+  "metrics": {
+    "mean_absolute_error_percent": 6.57,
+    "root_mean_squared_error_percent": 8.49,
+    "r2_score": 0.8321,
+    "accuracy_percent": 70.0,
+    "weighted_f1_percent": 72.4
+  },
+  "conflict_benchmarks": {
+    "case_1_normal_consensus": {
+      "tabular_risk_percent": 10.3,
+      "thermal_risk_percent": 7.3,
+      "fused_risk_percent": 12.1,
+      "disagreement_percent": 3.0,
+      "consensus_status": "TRUE",
+      "action": "Routine Monitoring (No Alarm)"
+    },
+    "case_2_runaway_consensus": {
+      "tabular_risk_percent": 66.4,
+      "thermal_risk_percent": 66.9,
+      "fused_risk_percent": 65.7,
+      "disagreement_percent": 0.5,
+      "consensus_status": "TRUE",
+      "action": "Automated Mitigation Spray Triggered"
+    },
+    "case_3_injected_sensor_glitch": {
+      "tabular_risk_percent": 67.4,
+      "thermal_risk_percent": 7.3,
+      "fused_risk_percent": 63.8,
+      "disagreement_percent": 60.0,
+      "consensus_status": "FALSE",
+      "action": "SUPPRESS SPRAY (Sensor Fault Diagnosed)"
+    },
+    "case_4_injected_camera_glare": {
+      "tabular_risk_percent": 10.3,
+      "thermal_risk_percent": 66.9,
+      "fused_risk_percent": 11.6,
+      "disagreement_percent": 56.6,
+      "consensus_status": "FALSE",
+      "action": "SUPPRESS SPRAY (Camera Artifact Diagnosed)"
+    }
+  }
+}
