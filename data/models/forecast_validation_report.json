@@ -1,0 +1,72 @@
+{
+  "validation_type": "walk_forward_backtest",
+  "approach": "24h simulation used as ground truth; held-out scenarios S07/S08 for validation",
+  "training_scenarios": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S05",
+    "S06"
+  ],
+  "held_out_scenarios": [
+    "S07",
+    "S08"
+  ],
+  "danger_threshold_pct": 60.0,
+  "results": [
+    {
+      "scenario": "Scenario S07 (Reactive Late Mitigation)",
+      "n_samples": 140,
+      "mae_60m": 8.5449,
+      "rmse_60m": 11.1969,
+      "mape_60m": 32.37,
+      "r2_60m": 0.6873,
+      "directional_accuracy": 62.14,
+      "hit_rate_pct": 60.0,
+      "false_alarm_rate_pct": 17.78,
+      "miss_rate_pct": 40.0,
+      "precision_pct": 11.11,
+      "f1_score": 18.75,
+      "confidence_band_coverage_pct": 94.29,
+      "true_positives": 3,
+      "false_positives": 24,
+      "true_negatives": 111,
+      "false_negatives": 2,
+      "mae_30m": 8.3962,
+      "horizon_degradation_pct": 1.8
+    },
+    {
+      "scenario": "Scenario S08 (Partial Sensor Fault)",
+      "n_samples": 140,
+      "mae_60m": 5.6906,
+      "rmse_60m": 7.5957,
+      "mape_60m": 47.84,
+      "r2_60m": 0.3312,
+      "directional_accuracy": 62.14,
+      "hit_rate_pct": 100.0,
+      "false_alarm_rate_pct": 0.0,
+      "miss_rate_pct": 0.0,
+      "precision_pct": 100.0,
+      "f1_score": 100.0,
+      "confidence_band_coverage_pct": 97.14,
+      "true_positives": 0,
+      "false_positives": 0,
+      "true_negatives": 140,
+      "false_negatives": 0,
+      "mae_30m": 5.4108,
+      "horizon_degradation_pct": 5.2
+    }
+  ],
+  "interpretation": {
+    "MAE": "Average prediction error in % risk \u2014 lower is better. <10% is good.",
+    "RMSE": "Penalizes large errors more than MAE \u2014 lower is better.",
+    "MAPE": "Error relative to actual value (%). <20% is acceptable.",
+    "R2": "0=no explanation, 1=perfect. Above 0.6 is good for forecasting.",
+    "hit_rate": "Of all real dangerous moments, what % did AI detect? Must be high.",
+    "miss_rate": "Of all real dangerous moments, what % did AI MISS? Must be 0%.",
+    "false_alarm_rate": "Of all safe moments, what % did AI falsely alarm? Should be low.",
+    "directional_acc": "Did AI predict if risk goes UP or DOWN? >60% is better than random.",
+    "band_coverage": "Is actual value inside 95% confidence range? Should be ~95%."
+  }
+}
