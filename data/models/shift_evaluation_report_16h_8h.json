@@ -1,0 +1,273 @@
+{
+  "evaluation_protocol": "16h Train (0-960m) / 8h Strictly Unseen Test Shift (961-1440m)",
+  "literature_citations": [
+    "Anghelescu & Diaconu (Fire 2024) - Detection & Monitoring of Coal Spontaneous Combustion",
+    "Laryea, Ren, Guo & Kang (CST 2025) - 5L-CMSMS & Hazard Zoning"
+  ],
+  "scenario_results": [
+    {
+      "scenario_id": "S01",
+      "n_test_samples": 48,
+      "mae_risk_pct": 4.58,
+      "rmse_risk_pct": 5.55,
+      "r2_risk": -0.9267,
+      "mae_temp_core": 1.84,
+      "rmse_temp_core": 2.3,
+      "hazard_zoning_acc_pct": 100.0,
+      "hazard_macro_precision_pct": 100.0,
+      "hazard_macro_recall_pct": 100.0,
+      "hazard_macro_f1": 100.0,
+      "high_hazard_recall_pct": 100.0,
+      "high_hazard_precision_pct": 100.0,
+      "lead_time_min": "N/A (Runaway Averted)",
+      "test_confusion": [
+        [
+          48,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "scenario_id": "S02",
+      "n_test_samples": 48,
+      "mae_risk_pct": 13.85,
+      "rmse_risk_pct": 15.54,
+      "r2_risk": -8.115,
+      "mae_temp_core": 6.85,
+      "rmse_temp_core": 8.5,
+      "hazard_zoning_acc_pct": 77.1,
+      "hazard_macro_precision_pct": 50.0,
+      "hazard_macro_recall_pct": 88.5,
+      "hazard_macro_f1": 43.5,
+      "high_hazard_recall_pct": 100.0,
+      "high_hazard_precision_pct": 100.0,
+      "lead_time_min": "N/A (Runaway Averted)",
+      "test_confusion": [
+        [
+          37,
+          11,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "scenario_id": "S03",
+      "n_test_samples": 48,
+      "mae_risk_pct": 9.24,
+      "rmse_risk_pct": 10.34,
+      "r2_risk": -2.2739,
+      "mae_temp_core": 45.56,
+      "rmse_temp_core": 53.13,
+      "hazard_zoning_acc_pct": 35.4,
+      "hazard_macro_precision_pct": 50.0,
+      "hazard_macro_recall_pct": 67.7,
+      "hazard_macro_f1": 26.2,
+      "high_hazard_recall_pct": 100.0,
+      "high_hazard_precision_pct": 0.0,
+      "lead_time_min": "N/A (Runaway Averted)",
+      "test_confusion": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          17,
+          31
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "scenario_id": "S04",
+      "n_test_samples": 48,
+      "mae_risk_pct": 4.43,
+      "rmse_risk_pct": 5.3,
+      "r2_risk": 0.1353,
+      "mae_temp_core": 23.87,
+      "rmse_temp_core": 27.62,
+      "hazard_zoning_acc_pct": 100.0,
+      "hazard_macro_precision_pct": 100.0,
+      "hazard_macro_recall_pct": 100.0,
+      "hazard_macro_f1": 100.0,
+      "high_hazard_recall_pct": 100.0,
+      "high_hazard_precision_pct": 100.0,
+      "lead_time_min": 100,
+      "test_confusion": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          48
+        ]
+      ]
+    },
+    {
+      "scenario_id": "S05",
+      "n_test_samples": 48,
+      "mae_risk_pct": 2.77,
+      "rmse_risk_pct": 3.28,
+      "r2_risk": -0.1229,
+      "mae_temp_core": 15.88,
+      "rmse_temp_core": 17.09,
+      "hazard_zoning_acc_pct": 100.0,
+      "hazard_macro_precision_pct": 100.0,
+      "hazard_macro_recall_pct": 100.0,
+      "hazard_macro_f1": 100.0,
+      "high_hazard_recall_pct": 100.0,
+      "high_hazard_precision_pct": 100.0,
+      "lead_time_min": 0,
+      "test_confusion": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          48
+        ]
+      ]
+    },
+    {
+      "scenario_id": "S06",
+      "n_test_samples": 48,
+      "mae_risk_pct": 2.92,
+      "rmse_risk_pct": 3.53,
+      "r2_risk": 0.2318,
+      "mae_temp_core": 12.21,
+      "rmse_temp_core": 12.41,
+      "hazard_zoning_acc_pct": 100.0,
+      "hazard_macro_precision_pct": 100.0,
+      "hazard_macro_recall_pct": 100.0,
+      "hazard_macro_f1": 100.0,
+      "high_hazard_recall_pct": 100.0,
+      "high_hazard_precision_pct": 100.0,
+      "lead_time_min": "N/A (Runaway Averted)",
+      "test_confusion": [
+        [
+          48,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "scenario_id": "S07",
+      "n_test_samples": 48,
+      "mae_risk_pct": 10.64,
+      "rmse_risk_pct": 11.24,
+      "r2_risk": -12.4524,
+      "mae_temp_core": 74.22,
+      "rmse_temp_core": 76.61,
+      "hazard_zoning_acc_pct": 62.5,
+      "hazard_macro_precision_pct": 81.2,
+      "hazard_macro_recall_pct": 50.0,
+      "hazard_macro_f1": 38.5,
+      "high_hazard_recall_pct": 100.0,
+      "high_hazard_precision_pct": 62.5,
+      "lead_time_min": 30,
+      "test_confusion": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          18
+        ],
+        [
+          0,
+          0,
+          30
+        ]
+      ]
+    },
+    {
+      "scenario_id": "S08",
+      "n_test_samples": 48,
+      "mae_risk_pct": 13.67,
+      "rmse_risk_pct": 14.5,
+      "r2_risk": -20.0494,
+      "mae_temp_core": 3.56,
+      "rmse_temp_core": 4.43,
+      "hazard_zoning_acc_pct": 100.0,
+      "hazard_macro_precision_pct": 100.0,
+      "hazard_macro_recall_pct": 100.0,
+      "hazard_macro_f1": 100.0,
+      "high_hazard_recall_pct": 100.0,
+      "high_hazard_precision_pct": 100.0,
+      "lead_time_min": "N/A (Runaway Averted)",
+      "test_confusion": [
+        [
+          48,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  ]
+}

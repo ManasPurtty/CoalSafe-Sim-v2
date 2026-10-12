@@ -52,11 +52,15 @@ class MultimodalTimeSeriesDataset(Dataset):
         feature_means=None,
         feature_stds=None,
         transform=None,
+        min_time_min=0,
+        max_time_min=1440,
     ):
         self.root_dir = pathlib.Path(root_dir)
         self.window_size = window_size
         self.sampling_step = sampling_step
         self.forecast_horizon_min = forecast_horizon_min
+        self.min_time_min = min_time_min
+        self.max_time_min = max_time_min
         self.transform = transform or transforms.Compose([
             transforms.Resize((50, 50)),
             transforms.ToTensor(),
@@ -128,9 +132,12 @@ class MultimodalTimeSeriesDataset(Dataset):
             for idx in sampled_indices:
                 pos_in_sampled = sampled_indices.index(idx)
                 if pos_in_sampled >= self.window_size - 1:
+                    t_curr = int(group.iloc[idx]["timestamp_min"])
+                    if not (self.min_time_min <= t_curr <= self.max_time_min):
+                        continue
+
                     window_df_indices = sampled_indices[pos_in_sampled - self.window_size + 1 : pos_in_sampled + 1]
                     
-                    t_curr = int(group.iloc[idx]["timestamp_min"])
                     t_30m = min(1440, t_curr + 30)
                     t_60m = min(1440, t_curr + 60)
                     
@@ -236,6 +243,67 @@ def get_dataloaders(
         forecast_horizon_min=forecast_horizon_min,
         feature_means=means,
         feature_stds=stds,
+    )
+
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=False)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, drop_last=False)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, drop_last=False)
+
+    return train_loader, val_loader, test_loader, (means, stds)
+
+def get_dataloaders_16h_split(
+    root_dir,
+    batch_size=16,
+    window_size=6,
+    sampling_step=10,
+    forecast_horizon_min=60,
+    all_scenarios=("S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08"),
+    train_split_min=960,  # 16 Hours (minutes 0 to 960)
+):
+    """
+    Creates shift-based train, val, and test PyTorch DataLoaders:
+      - Train (0h to 14h, t <= 840 min): 840 minutes for parameter optimization across all scenarios
+      - Val   (14h to 16h, 840 < t <= 960 min): 120 minutes for checkpoint selection
+      - Test  (16h to 24h, t > 960 min): 480 minutes (Last 8 Hours) strictly unseen future test window
+    """
+    # 1. Full training period (0 to 840 min)
+    train_dataset = MultimodalTimeSeriesDataset(
+        root_dir=root_dir,
+        scenarios=all_scenarios,
+        window_size=window_size,
+        sampling_step=sampling_step,
+        forecast_horizon_min=forecast_horizon_min,
+        min_time_min=0,
+        max_time_min=840,
+    )
+
+    means = train_dataset.feature_means
+    stds = train_dataset.feature_stds
+
+    # 2. Validation period (840 to 960 min)
+    val_dataset = MultimodalTimeSeriesDataset(
+        root_dir=root_dir,
+        scenarios=all_scenarios,
+        window_size=window_size,
+        sampling_step=sampling_step,
+        forecast_horizon_min=forecast_horizon_min,
+        feature_means=means,
+        feature_stds=stds,
+        min_time_min=841,
+        max_time_min=960,
+    )
+
+    # 3. Strictly unseen 8-hour test shift (961 to 1440 min)
+    test_dataset = MultimodalTimeSeriesDataset(
+        root_dir=root_dir,
+        scenarios=all_scenarios,
+        window_size=window_size,
+        sampling_step=sampling_step,
+        forecast_horizon_min=forecast_horizon_min,
+        feature_means=means,
+        feature_stds=stds,
+        min_time_min=961,
+        max_time_min=1440,
     )
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=False)

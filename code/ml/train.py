@@ -11,7 +11,7 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 
-from dataset import get_dataloaders
+from dataset import get_dataloaders, get_dataloaders_16h_split
 from model import MultimodalTimeSeriesNet
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
@@ -143,19 +143,16 @@ def main():
     if torch.cuda.is_available():
         print(f"  [GPU]    {torch.cuda.get_device_name(0)}")
 
-    # Load Data with +1h future forecasting targets
-    train_loader, val_loader, test_loader, (means, stds) = get_dataloaders(
+    # Load Data with 16h Train / 8h Test temporal split across ALL scenarios
+    train_loader, val_loader, test_loader, (means, stds) = get_dataloaders_16h_split(
         root_dir=ROOT,
         batch_size=16,
         window_size=6,
         sampling_step=10,
         forecast_horizon_min=60,
-        train_scenarios=("S01", "S02", "S03", "S05"),
-        val_scenarios=("S04", "S06", "S08"),
-        test_scenarios=("S07",),
     )
 
-    print(f"  [DATA]   Train Samples: {len(train_loader.dataset)} | Val: {len(val_loader.dataset)} | Test: {len(test_loader.dataset)}")
+    print(f"  [DATA]   Shift-Based Split: Train (0-14h): {len(train_loader.dataset)} | Val (14-16h): {len(val_loader.dataset)} | Unseen Test (16-24h): {len(test_loader.dataset)}")
 
     # Initialize Model
     model = MultimodalTimeSeriesNet(num_tab_features=10, num_classes=5, conflict_threshold=25.0).to(device)
